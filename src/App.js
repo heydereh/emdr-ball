@@ -1,25 +1,57 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import Home from './components/home/Home';
+import Appbar from './components/appbar/Appbar';
+import Admin from './components/admin/Admin';
+import Session from './components/session/Session';
+
+const history = createBrowserHistory();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter history={history} >
+      <div >
+        <div>
+          <Appbar />
+        </div>
+        
+          <Switch >
+            <Route
+              path="/"
+              exact
+              component={() => <Redirect to={"/home"} />}
+            />
+            <Route
+              path="/home"
+              exact
+              component={() => <Home />}
+            />
+            <Route
+              path="/admin"
+              exact
+              component={() => <Admin />}
+            />
+            <Route
+              path="/admin/:sessionId"
+              exact
+              component={() => <Admin />}
+            />
+            <div className="w-100 h-100">
+            <Route
+              path="/:sessionId"
+              exact
+              component={() => <Session />}
+            />
+            </div>
+
+          </Switch>
+        
+      </div>
+    </BrowserRouter>
   );
 }
 
