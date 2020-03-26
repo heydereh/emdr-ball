@@ -40,13 +40,11 @@ function App() {
               exact
               component={() => <Admin />}
             />
-            <div className="w-100 h-100">
             <Route
               path="/:sessionId"
               exact
               component={() => <Session />}
             />
-            </div>
 
           </Switch>
         

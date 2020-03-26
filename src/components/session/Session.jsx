@@ -2,27 +2,24 @@ import React from 'react'
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { getSessionInfo } from '../../actions/sessionActions'
-import { Motion, spring, presets } from 'react-motion';
-import {ReactMotionLoop} from 'react-motion-loop';
+import injectStyle from '../../helpers/incejctStyle';
 
-
-const style = {
-    square: {
-        width: "5em",
-        height: "5em",
-        background: "red",
-        position: "absolute",
-        
-    },
-
-}
+// 
+const keyframesStyle = `
+    @keyframes mymoveSession {
+        0%   {left: 0px; }
+        50% {left: 95%;}
+        100% {left: 0px;}
+    }
+    `;
+injectStyle(keyframesStyle);
 
 class Session extends React.Component {
 
     state = {
         open: false,
         animationWidth: 100,
-        
+        speed: 4,
     }
 
     componentDidMount() {
@@ -34,83 +31,40 @@ class Session extends React.Component {
             })
         }
     }
-
-    handleAnimationWidth = (width) => {
-        this.setState({
-            ...this.state,
-            animationWidth: width
-        })
+    // ${this.state.speed}
+    speedArray = [0, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.8, 0.5 ]
+    style = {
+        square: {
+            width: "5rem",
+            height: "5rem",
+            background: "red",
+            position: "relative",
+            WebkitAnimation: `mymoveSession ${this.props.ballSpeed && this.props.ballSpeed}s infinite linear`,/* infinite */
+            animationDirection: 'normal',
+            animationTimingFunciton: 'linear',
+        },
+        container: {
+            height: "100%",
+            width: "100%"
+        },
     }
 
-    handleAnimationToggle = (e) => {
-       e && e.preventDefault()        
-        this.setState({...this.state, 
-            open: !this.state.open
-        })
-    }
-
-    handleAnimationRest = (e) => {
-
-        console.log("ANIMATION REST");
-
-        if (this.state.widthOfBoxContainer > 0) {
-            this.setState({
-                ...this.state,
-                widthOfBoxContainer: 0
-            })
-            
-        } else {
-            this.setState({
-                ...this.state,
-                widthOfBoxContainer: this.myContainer.offsetWidth
-            })
-        }
-
-        this.setState({
-            open: !this.state.open
-        })
-        
-    }
 
     render() {
         console.log(this.props);
         console.log(this.state);
-        console.log(this.myContainer && this.myContainer.offsetWidth);
-        const widthOfBoxContainer = this.myContainer && this.myContainer.offsetWidth
         return (
             <div className="" >
                 <div>Session Page</div>
                 <div>
                     `Hasta adi: {this.props.patient && this.props.patient}`
                 </div>
-                <div><button onClick={this.handleAnimationToggle} >toggle</button>
-                    <Motion  /* Burada metod cagirirsan rerender etmiyor*/ style={{ x: spring(this.state.open ? widthOfBoxContainer : 0, {precision: 0.01, stiffness: 100, damping: 15} ) }}>
-                        {({ x }) =>{
-                            // console.log(x);
 
-                            if (x === 0) {
-                                this.handleAnimationToggle();
-                            }
-                            
-
-
-                            // children is a callback which should accept the current value of
-                            // `style`
-                            // ref={node => node && this.handleAnimationWidth(node.offsetWidth)
-                            return <div className="demo0" ref={node => this.myContainer = node ? node : null} >
-                                <div className="demo0-block" style={{
-                                    WebkitTransform: `translate3d(${x}px, 0, 0)`,
-                                    transform: `translate3d(${x}px, 0, 0)`,
-                                }} />
-                            </div>}
-                        }
-                    </Motion>
-                </div>
-                <div className="px-2">
-                    <div className="bg-secondary pt-4 pl-3" style={{ height: "100vh" }}>
-                        <div className style={style.square} ></div>
+                {/* <div className="px-2"> */}
+                    <div className="bg-secondary pt-4 pl-3" style={this.style.container}>
+                        <div style={this.style.square} ></div>
                     </div>
-                </div>
+                {/* </div> */}
 
             </div>
         )
@@ -121,6 +75,9 @@ const mapStateToProps = (state) => {
     console.log(state);
     return {
         patient: state.currentSession.patient,
+        ballShape: state.currentSession.ballShape,
+        direction: state.currentSession.direction,
+        ballSpeed: state.currentSession.ballSpeed,
     }
 }
 
