@@ -5,6 +5,9 @@ import {
     GET_SESSION_INFO_START,
     GET_SESSION_INFO_DONE,
     GET_SESSION_INFO_ERROR,
+    UPDATE_SESSION_START,
+    UPDATE_SESSION_DONE,
+    UPDATE_SESSION_ERROR,
     SERVER_URL,
  } from '../actions/actionConstants';
 import axios from 'axios';
@@ -83,6 +86,38 @@ import axios from 'axios';
             .catch(error => {
                 dispatch({
                     type: GET_SESSION_INFO_ERROR,
+                    payload: error
+                });
+            });
+    }
+ }
+
+ export const updateSession = (options, sessionId) => {
+    
+
+    return async dispatch => {
+        console.log(options);
+        
+        dispatch({
+            type: UPDATE_SESSION_START,
+        })
+
+        await axios
+            .put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, options)
+            .then(({ data }) => {
+                if (data.success) {
+                    dispatch({
+                        type: UPDATE_SESSION_DONE,
+                        payload: data
+                    })
+                } else {
+                    // Bu kısımlar sonra
+                    throw new Error(data.error)
+                }
+            })
+            .catch(error => {
+                dispatch({
+                    type: UPDATE_SESSION_ERROR,
                     payload: error
                 });
             });

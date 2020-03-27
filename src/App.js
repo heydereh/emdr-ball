@@ -7,7 +7,8 @@ import { createBrowserHistory } from "history";
 import Home from './components/home/Home';
 import Appbar from './components/appbar/Appbar';
 import {Admin} from './components/admin/Admin';
-import Session from './components/session/Session';
+import {Session} from './components/session/Session';
+import { SessionAdmin } from './components/session-admin/sessionAdmin';
 
 const history = createBrowserHistory();
 
@@ -38,7 +39,7 @@ function App() {
             <Route
               path="/admin/:sessionId"
               exact
-              component={() => <Admin />}
+              component={() => <SessionAdmin />}
             />
             <Route
               path="/:sessionId"

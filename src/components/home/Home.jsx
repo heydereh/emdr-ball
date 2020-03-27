@@ -21,27 +21,6 @@ const Home = () => {
                 >Seansa Gir</Link></button>
                 </div>
             </div>
-
-            {/* <div className="input-group" >
-                <div className="form-control" type="text">
-                    <div className="input-group-append">
-                        <button>
-                        <Link
-                            className="btn btn-outline-primary"
-                            style={{ textDecoration: "none", color: "inherit" }}
-                            to={`/${sessionId}`}
-                        >Başla</Link>
-                        </button>
-                    </div>
-                </div>
-            </div> */}
-
-
-            {/* <Link
-                className="btn btn-outline-primary"
-                style={{ textDecoration: "none", color: "inherit" }}
-                to="/admin"
-            >Admin</Link> */}
         </div>
     )
 }
