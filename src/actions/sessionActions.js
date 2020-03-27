@@ -9,21 +9,26 @@ import {
  } from '../actions/actionConstants';
 import axios from 'axios';
 
-const pseudoOptions = {
-    sessionId: Date.now(),
-    patient: "Hasta 1",
-    ballShape: "circle",
-    direction: "right",
-    ballSpeed: 5,
-    isActive: true,
-}
 
- export const createSession = (options = pseudoOptions) => {
-    // const sessionId = Date.now()
+
+ export const createSession = (options) => {
+    const newSessionId = Date.now()
+    const pseudoOptions = {
+        sessionId: newSessionId,
+        patient: "Hasta 1",
+        ballShape: "circle",
+        direction: "right",
+        ballSpeed: 5,
+        isActive: true,
+    }
+    if (!options) {
+        options = pseudoOptions;
+    }
     // console.log(`SESSION ID: ${sessionId} START`);
-
+    
     return async dispatch => {
-
+        console.log(options);
+        
         dispatch({
             type: SESSION_CREATE_START,
 

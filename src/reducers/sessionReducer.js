@@ -18,7 +18,7 @@ const initialState = {
     patient: null,
     ballShape: 'square',
     direction: 'right',
-    ballSpeed: '0',
+    ballSpeed: '9',
     isActive: false,
     getSessionLoading: false,
     getSessionError: null,

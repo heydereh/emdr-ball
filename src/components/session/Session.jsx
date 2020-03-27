@@ -19,7 +19,6 @@ class Session extends React.Component {
     state = {
         open: false,
         animationWidth: 100,
-        speed: 4,
     }
 
     componentDidMount() {
@@ -39,7 +38,7 @@ class Session extends React.Component {
             height: "5rem",
             background: "red",
             position: "relative",
-            WebkitAnimation: `mymoveSession ${this.props.ballSpeed && this.props.ballSpeed}s infinite linear`,/* infinite */
+            WebkitAnimation: `mymoveSession ${this.props.ballSpeed && this.speedArray[this.props.ballSpeed]}s infinite linear`,/* infinite */
             animationDirection: 'normal',
             animationTimingFunciton: 'linear',
         },

@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Home from './components/home/Home';
 import Appbar from './components/appbar/Appbar';
-import Admin from './components/admin/Admin';
+import {Admin} from './components/admin/Admin';
 import Session from './components/session/Session';
 
 const history = createBrowserHistory();
