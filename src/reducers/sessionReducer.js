@@ -10,6 +10,7 @@ import {
 
 
 const initialState = {
+    _id: "",
     sessionCreateLoading: false,
     sessionCreateError: null,
     sessionCreateLoaded: false,
@@ -23,11 +24,13 @@ const initialState = {
     getSessionLoading: false,
     getSessionError: null,
     getSessionLoaded: false,
+    hasBallStarted: false,
 
 }
 
 const sessionReducer = (state = initialState, action) => {
-
+    console.log(action);
+    
     switch (action.type) {
         case SESSION_CREATE_START:
             return {
@@ -59,6 +62,7 @@ const sessionReducer = (state = initialState, action) => {
                 direction: action.payload.direction,
                 ballSpeed: action.payload.ballSpeed,
                 isActive: true,
+                hasBallStarted: action.payload.hasBallStarted,
             }
         case SESSION_CREATE_ERROR:
             return {
@@ -80,6 +84,7 @@ const sessionReducer = (state = initialState, action) => {
         case GET_SESSION_INFO_DONE:
             return {
                 ...state,
+                _id: action.payload._id,
                 sessionCreateLoading: false,
                 sessionCreateLoaded: true,
                 sessionId: action.payload.sessionId,
@@ -89,6 +94,7 @@ const sessionReducer = (state = initialState, action) => {
                 direction: action.payload.direction,
                 ballSpeed: action.payload.ballSpeed,
                 isActive: action.payload.isActive,
+                hasBallStarted: action.payload.hasBallStarted,
             }
         case GET_SESSION_INFO_ERROR:
         return {

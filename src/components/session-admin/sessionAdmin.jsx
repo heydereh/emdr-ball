@@ -3,36 +3,46 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch } from "react-router-dom";
 import { Pause, Play } from 'react-feather';
 import { updateSession, getSessionInfo } from '../../actions/sessionActions'
-import { useStateWithCallbackInstant } from 'use-state-with-callback';
 
 export const SessionAdmin = () => {
     let match = useRouteMatch();
+    const sessionId = match.params.sessionId
     const dispatch = useDispatch();
-      // mapDispatchToProps alternatifi hook
-      useEffect(()=> {
-        
-        dispatch(getSessionInfo(match.params.sessionId));
-    }, [])
-    const { patient, ballShape, direction, ballSpeed, hasBallStarted } = useSelector(state => {
-        console.log(state);
-        
-        return {
+    // mapDispatchToProps alternatifi hook
+    useEffect(()=> {
+      
+      dispatch(getSessionInfo(sessionId));
+  }, [])
+    const { patient, ballShape, direction, ballSpeed, hasBallStarted } = useSelector(state => ({
             patient: state.currentSession.patient,
             ballShape: state.currentSession.ballShape,
             direction: state.currentSession.direction,
             ballSpeed: state.currentSession.ballSpeed,
             hasBallStarted: state.currentSession.hasBallStarted,
-        }
-    })
-   
+    }))
+    // bunu yukarıdaki gruba ekleyince alamadı bi türlü
+   const id = useSelector(state => state.currentSession._id);
 
-    const [speedOfBall, setSpeed] = useStateWithCallbackInstant(ballSpeed, newSpeed => {
-        console.log(newSpeed);
-        // TODO HIZ İŞİ ANLIK OLMUYOR EKSPTRA BUTONLA GONDERMEK GEREK
-    })
+    
+   /**
+    * Burada saçma işler döndü ben de tam anlamadım özetle
+    * storedaki data ile state i güncelleme yapıldı
+    * önce store datası default olarak veriliyor. sonra use effectle 
+    * shouldcomponentupdate alternatifi hook ile yeni render da state güncelleniyor
+    */
+    const [speedOfBall, setSpeed] = useState(ballSpeed)
+
+    useEffect(() => {
+        setSpeed(ballSpeed)
+    }, [ballSpeed])
 
     const [shape, setShape] = useState("Square")
-    console.log(speedOfBall);
+    console.log(id);
+    console.log(ballSpeed);
+    console.log(direction);
+    console.log(ballShape);
+    console.log(patient);
+    console.log(hasBallStarted);
 
     return (
         <div className="" >
@@ -40,14 +50,15 @@ export const SessionAdmin = () => {
                 <div className="col-4 border border-dark">
                     <div className="text-break" >ADMIN SESSION PAGE</div>
                     <div className="text-break" >
-                        `SessionID: {match.params.sessionId}`
+                        `SessionID: {sessionId}`
                 </div>
                     <div>
                         <div className="mt-2">
                             {`SET SPEED [${speedOfBall}]`}
                         </div>
                         <div className="mt-2" id="speed-slider">
-                            <input style={{}} type="range" min="0" max="9" value={ballSpeed} className="slider w-100" onChange={(e) => setSpeed(e.target.value)} id="myRange" />
+                            <input style={{}} type="range" min="0" max="9" value={speedOfBall} className="slider w-100" onChange={(e) => setSpeed(e.target.value)} id="myRange" />
+                            <button className="btn btn-primary" onClick={() => dispatch(updateSession({ballSpeed: speedOfBall, _id: id}, sessionId))} >Apply Speed</button>
                         </div>
                         <div className="mt-2">
                             SET SHAPE
