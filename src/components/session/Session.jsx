@@ -4,6 +4,7 @@ import { useRouteMatch  } from "react-router-dom";
 import { connect } from 'react-redux';
 import { getSessionInfo } from '../../actions/sessionActions'
 import injectStyle from '../../helpers/incejctStyle';
+import socketIOClient from "socket.io-client";
 
 // 
 
@@ -32,10 +33,17 @@ export const Session = () =>  {
       }
     })
 
-    // mapDispatchToProps alternatifi hook
+    
+    // ComponentDidMount
     useEffect(()=> {
         
-        dispatch(getSessionInfo(match.params.sessionId));
+        // dispatch(getSessionInfo(match.params.sessionId));
+
+        const socket = socketIOClient("http://localhost:5050");
+        // console.log(socket);
+        
+        socket.on("message", data => console.log(data))
+
     }, [])
 
     // ${this.state.speed}

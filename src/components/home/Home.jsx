@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { getSessionInfo } from '../../actions/sessionActions'
 
 const Home = () => {
 
     // const sessionId = "1584986021338";
-    
+    const dispatch = useDispatch();
+
     
     const [sessionId, setsessionId] = useState("")
     // TODO buraya textbox ko
@@ -17,7 +20,7 @@ const Home = () => {
                     <Link
                         className="btn btn-outline-primary"
                         style={{ textDecoration: "none", color: "inherit", lineHeight: "0.4"}}
-                        to={`/${sessionId}`}
+                        to={location =>{dispatch(getSessionInfo(sessionId)); return{ ...location, pathname: `/${sessionId}` }}}
                 >Seansa Gir</Link></button>
                 </div>
             </div>
