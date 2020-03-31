@@ -61,7 +61,7 @@ const sessionReducer = (state = initialState, action) => {
                 ballShape: action.payload.ballShape,
                 direction: action.payload.direction,
                 ballSpeed: action.payload.ballSpeed,
-                isActive: true,
+                isActive: action.payload.isActive,
                 hasBallStarted: action.payload.hasBallStarted,
             }
         case SESSION_CREATE_ERROR:
