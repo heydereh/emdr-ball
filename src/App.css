@@ -1,6 +1,7 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
+
 
 /* .admin-container {
   display: inline !important;
@@ -8,70 +9,115 @@
 
 
 /* className="container-fluid" style={{position: "absolute",zIndex: 3, width:"100%", paddingLeft: "0", paddingRight: 0}} */
+
+
 /* admin page te tam ekran foto appbar ı eziyordu bu şekilde sadece bu sayfa için görünümünü değiştiriyorum */
+
 @media (max-width: 991.98px) {
-  .appbar-for-admin {
-    position: absolute !important;
-    width: 100% !important;
-    z-index: 3;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
+    .appbar-for-admin {
+        position: absolute !important;
+        width: 100% !important;
+        z-index: 3;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        max-width: 100% !important;
+    }
+    /* app bar üste binmemesi icin */
+    #main-container {
+        padding-top: 80px;
+    }
+}
+@media (min-width: 991.98px) {
+    .appbar-for-admin {
+        position: absolute !important;
+        width: 100% !important;
+        z-index: 3;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        max-width: 100% !important;
+    }
+    #main-container {
+        padding-top: 80px;
+    }
+}
+
+@media (min-width: 768px) {
+    .appbar-for-admin>.container,
+    .container-md,
+    .container-sm {
+        max-width: 100%;
+    }
+    #main-container {
+        padding-top: 80px;
+    }
+}
+
+@media (min-width: 576px) {
+    .appbar-for-admin>.container,
+    .container-md,
+    .container-sm {
+        max-width: 100%;
+    }
+    #main-container {
+        padding-top: 80px;
+    }
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 .animate-box {
-  width: 100px;
-  height: 100px;
-  background: red;
+    width: 100px;
+    height: 100px;
+    background: red;
 }
+
 .demo0 {
-  border-radius: 4px;
-  background-color: rgb(240, 240, 232);
-  position: relative;
-  margin-left: 15%;
-  margin-right: 15%;
-  width: auto;
-  height: 50px;
+    border-radius: 4px;
+    background-color: rgb(240, 240, 232);
+    position: relative;
+    margin-left: 15%;
+    margin-right: 15%;
+    width: auto;
+    height: 50px;
 }
+
 .demo0-block {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border-radius: 4px;
-  background-color: rgb(130, 181, 198);
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: rgb(130, 181, 198);
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

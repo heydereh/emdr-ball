@@ -19,7 +19,7 @@ function App() {
         <div>
           <Appbar />
         </div>
-        
+        <div id="main-container">
           <Switch >
             <Route
               path="/"
@@ -48,7 +48,7 @@ function App() {
             />
 
           </Switch>
-        
+          </div>
       </div>
     </BrowserRouter>
   );

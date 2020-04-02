@@ -2,8 +2,8 @@ import React from 'react'
 
 const Appbar = () => {
     return (
-        <div className="appbar-for-admin">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{minHeight: "80px"}}>
+        <div className="appbar-for-admin"  >
+            <nav className="container navbar navbar-expand-lg navbar-light bg-light" style={{minHeight: "80px"}}>
                 <a className="navbar-brand" href="/">EMDr Eye Theraphy</a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon" />
