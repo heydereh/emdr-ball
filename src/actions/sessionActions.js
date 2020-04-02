@@ -8,6 +8,9 @@ import {
     UPDATE_SESSION_START,
     UPDATE_SESSION_DONE,
     UPDATE_SESSION_ERROR,
+    DELETE_SESSION_START,
+    DELETE_SESSION_DONE,
+    DELETE_SESSION_ERROR,
     SERVER_URL,
  } from '../actions/actionConstants';
 import axios from 'axios';
@@ -26,6 +29,8 @@ import axios from 'axios';
     }
     if (!options) {
         options = pseudoOptions;
+    } else {
+        options.sessionId = newSessionId
     }
     // console.log(`SESSION ID: ${sessionId} START`);
     
@@ -43,7 +48,7 @@ import axios from 'axios';
                 if (data.success) {
                     dispatch({
                         type: SESSION_CREATE_DONE,
-                        payload: data
+                        payload: data.data
                     })
                 } else {
                     // Bu kısımlar sonra
@@ -108,7 +113,8 @@ import axios from 'axios';
                 if (data.success) {
                     dispatch({
                         type: UPDATE_SESSION_DONE,
-                        payload: data
+                        // burada donen data kullanılmıyor socketten update edildi bilgisi karsi tarafa gonderilip yeniden session bilgisi cektiriliyor
+                        payload: data.data
                     })
                 } else {
                     // Bu kısımlar sonra
@@ -118,9 +124,45 @@ import axios from 'axios';
             .catch(error => {
                 dispatch({
                     type: UPDATE_SESSION_ERROR,
-                    payload: error
+                    payload: error /* su an exception handling 0 DAHA SONRA DUZELT!!*/
                 });
             });
+    }
+ }
+
+ export const deleteSession = (body, sessionId) => {
+    
+    
+
+    return async dispatch =>  {
+        console.log(body);
+        console.log(sessionId);
+
+            dispatch({
+            type: DELETE_SESSION_START
+        })
+
+        await axios
+        .delete(`${SERVER_URL}/api/v1/sessions/${sessionId}`, {
+            data: body
+        })
+        .then(({ data }) => {
+            if (data.success) {
+                dispatch({
+                    type: DELETE_SESSION_DONE,
+                    payload: data.data /** deleted data */
+                })
+            } else {
+                // Bu kısımlar sonra
+                throw new Error(data.error)
+            }
+        })
+        .catch(err => {
+            dispatch({
+                type: DELETE_SESSION_ERROR,
+                payload: err
+            })
+        })
     }
  }
 

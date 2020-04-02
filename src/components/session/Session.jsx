@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteMatch } from "react-router-dom";
-import { connect } from 'react-redux';
 import { getSessionInfo } from '../../actions/sessionActions'
 import injectStyle from '../../helpers/incejctStyle';
 import socketIOClient from "socket.io-client";
@@ -30,7 +29,7 @@ export const Session = () => {
 
     // TODO isactive false olduğunda bu inject işlemini nası geri alacağımı düşünmem lazım
     const keyframesStyle = `
-    @keyframes ${isActive ? 'mymoveSession' : 'moveSessionStop'} {
+    @keyframes mymoveSession {
         0%   {left: 0px; }
         50% {left: 90%;}
         100% {left: 0px;}
@@ -79,7 +78,7 @@ export const Session = () => {
         height: "5rem",
         background: "red",
         position: "relative",
-        WebkitAnimation: `mymoveSession ${ballSpeed && speedArray[ballSpeed]}s infinite linear`,/* infinite */
+        WebkitAnimation: `${isActive ? 'mymoveSession' : 'moveSessionStop'} ${ballSpeed && speedArray[ballSpeed]}s infinite linear`,/* infinite */
         animationDirection: 'normal',
         animationTimingFunciton: 'linear',
     })
@@ -89,7 +88,7 @@ export const Session = () => {
         background: "red",
         borderRadius: "50%",
         position: "relative",
-        WebkitAnimation: `mymoveSession ${ballSpeed && speedArray[ballSpeed]}s infinite linear`,/* infinite */
+        WebkitAnimation: `${isActive ? 'mymoveSession' : 'moveSessionStop'} ${ballSpeed && speedArray[ballSpeed]}s infinite linear`,/* infinite */
         animationDirection: 'normal',
         animationTimingFunciton: 'linear',
     })
@@ -99,13 +98,12 @@ export const Session = () => {
         height: "5rem",
         transform: "rotate(-45deg)",
         width: "5rem",
-        WebkitAnimation: `mymoveSession ${ballSpeed && speedArray[ballSpeed]}s infinite linear`,/* infinite */
+        WebkitAnimation: `${isActive ? 'mymoveSession' : 'moveSessionStop'} ${ballSpeed && speedArray[ballSpeed]}s infinite linear`,/* infinite */
         animationDirection: 'normal',
         animationTimingFunciton: 'linear',
     })
 
 
-    console.log(shape.get('square'));
 
 
     return (
@@ -126,18 +124,3 @@ export const Session = () => {
     )
 }
 
-// const mapStateToProps = (state) => {
-//     console.log(state);
-//     return {
-        // patient: state.currentSession.patient,
-        // ballShape: state.currentSession.ballShape,
-        // direction: state.currentSession.direction,
-        // ballSpeed: state.currentSession.ballSpeed,
-//     }
-// }
-
-// const mapDispatchToProps = {
-//     getSessionInfo,
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Session));

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useRouteMatch } from "react-router-dom";
-import { Pause, Play } from 'react-feather';
-import { updateSession, getSessionInfo } from '../../actions/sessionActions'
+import { useRouteMatch, useHistory } from "react-router-dom";
+import { Pause, Play, XSquare } from 'react-feather';
+import { updateSession, getSessionInfo, deleteSession } from '../../actions/sessionActions'
 import socketIOClient from "socket.io-client";
-
+import { Session } from '../session/Session'
 
 export const SessionAdmin = () => {
+    let history = useHistory();
     let match = useRouteMatch();
     const sessionId = match.params.sessionId
     const socket = socketIOClient(`http://localhost:5050`);
@@ -17,12 +18,14 @@ export const SessionAdmin = () => {
         dispatch(getSessionInfo(sessionId));
     }, [])
 
-    const { patient, ballShape, direction, ballSpeed, hasBallStarted } = useSelector(state => ({
+    const { patient, ballShape, direction, ballSpeed, hasBallStarted, sessionDeleteLoaded } = useSelector(state => ({
+        id: state.currentSession._id,
         patient: state.currentSession.patient,
         ballShape: state.currentSession.ballShape,
         direction: state.currentSession.direction,
         ballSpeed: state.currentSession.ballSpeed,
         hasBallStarted: state.currentSession.hasBallStarted,
+        sessionDeleteLoaded: state.currentSession.sessionDeleteLoaded,
     }))
     // bunu yukarıdaki gruba ekleyince alamadı bi türlü
     const id = useSelector(state => state.currentSession._id);
@@ -39,6 +42,13 @@ export const SessionAdmin = () => {
     useEffect(() => {
         setSpeed(ballSpeed)
     }, [ballSpeed])
+
+
+  useEffect(() => {
+    if (sessionDeleteLoaded) {
+        history.push("/admin")
+    }
+    })
 
     console.log(id);
     console.log(ballSpeed);
@@ -95,15 +105,16 @@ export const SessionAdmin = () => {
                             </div>
                         </div>
                         <div className="mt-3">
-                            <button type="button" className="btn btn-outline-primary" onClick={() => dispatch(updateSession({ isActive: false, _id: id }, sessionId))} ><span><Pause size={20} /></span> Pause</button>
-                            <button type="button" className="btn btn-outline-primary ml-2" onClick={() => dispatch(updateSession({ isActive: true, _id: id }, sessionId))} ><span><Play size={20} /> </span>Resume</button>
+                            <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => dispatch(updateSession({ isActive: false, _id: id }, sessionId))} ><span><Pause size={20} /></span> Pause</button>
+                            <button type="button" className="btn btn-outline-primary ml-2 btn-sm" onClick={() => dispatch(updateSession({ isActive: true, _id: id }, sessionId))} ><span><Play size={20} /> </span>Resume</button>
+                            <button type="button" className="btn btn-outline-danger ml-2 btn-sm" onClick={() => dispatch(deleteSession({_id: id}, sessionId))} ><span><XSquare size={20} /> </span>Çıkış</button>
                         </div>
 
                     </div>
                 </div>
                 {/* SAĞ TARAF */}
                 <div className="col-8 border border-dark">
-                    TOP BURADA DURMALI
+                    <Session />
             </div>
             </div>
         </div>

@@ -5,6 +5,9 @@ import {
     GET_SESSION_INFO_START,
     GET_SESSION_INFO_DONE,
     GET_SESSION_INFO_ERROR,
+    DELETE_SESSION_ERROR,
+    DELETE_SESSION_START,
+    DELETE_SESSION_DONE,
 
 } from '../actions/actionConstants'
 
@@ -25,12 +28,14 @@ const initialState = {
     getSessionError: null,
     getSessionLoaded: false,
     hasBallStarted: false,
-
+    sessionDeleteLoading: false,
+    sessionDeleteLoaded: false,
+    sessionDeleteError: null,
 }
 
 const sessionReducer = (state = initialState, action) => {
     console.log(action);
-    
+
     switch (action.type) {
         case SESSION_CREATE_START:
             return {
@@ -48,6 +53,9 @@ const sessionReducer = (state = initialState, action) => {
                 getSessionLoading: false,
                 getSessionError: null,
                 getSessionLoaded: false,
+                sessionDeleteLoading: true,
+                sessionDeleteLoaded: false,
+                sessionDeleteError: null,
             }
         case SESSION_CREATE_DONE:
             return {
@@ -80,6 +88,10 @@ const sessionReducer = (state = initialState, action) => {
                 sessionCreateLoading: true,
                 sessionCreateError: null,
                 sessionCreateLoaded: false,
+                sessionDeleteLoading: true,
+                sessionDeleteLoaded: false,
+                sessionDeleteError: null,
+                
             }
         case GET_SESSION_INFO_DONE:
             return {
@@ -97,11 +109,32 @@ const sessionReducer = (state = initialState, action) => {
                 hasBallStarted: action.payload.hasBallStarted,
             }
         case GET_SESSION_INFO_ERROR:
-        return {
-            ...state,
-            sessionCreateLoading: false,
-            sessionCreateError: action.payload,
-            sessionCreateLoaded: false,
+            return {
+                ...state,
+                sessionCreateLoading: false,
+                sessionCreateError: action.payload,
+                sessionCreateLoaded: false,
+            }
+        case DELETE_SESSION_START:
+            return {
+                ...state,
+                sessionDeleteLoading: true,
+                sessionDeleteLoaded: false,
+                sessionDeleteError: null,
+        }
+        case DELETE_SESSION_DONE:
+            return {
+                ...state,
+                sessionDeleteLoading: false,
+                sessionDeleteLoaded: true,
+                sessionDeleteError: null,
+        }
+        case DELETE_SESSION_ERROR:
+            return {
+                ...state,
+                sessionDeleteLoading: false,
+                sessionDeleteLoaded: false,
+                sessionDeleteError: action.payload,
         }
         default:
             return state;

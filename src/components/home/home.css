@@ -1,0 +1,35 @@
+@media (min-width:768px) {
+    header.masthead {
+      padding-top: 12rem;
+      padding-bottom: 12rem;
+    }
+  }
+  
+  header.masthead {
+    position: relative;
+    background-color: #343a40;
+    background-size: cover;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+  
+  .text-white {
+    color: #fff!important;
+  }
+
+  .text-center {
+    text-align: center!important;
+  }
+  
+  .features-icons {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+  
+  .bg-light {
+    background-color: #f8f9fa!important;
+  }
+  
+      
+  
+  
