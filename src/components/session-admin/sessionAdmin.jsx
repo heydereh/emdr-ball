@@ -5,7 +5,7 @@ import { Pause, Play, XSquare } from 'react-feather';
 import { updateSession, getSessionInfo, deleteSession } from '../../actions/sessionActions'
 import socketIOClient from "socket.io-client";
 import { Session } from '../session/Session'
-
+import { DeleteModal } from '../Modals/DeleteModal'
 export const SessionAdmin = () => {
     let history = useHistory();
     let match = useRouteMatch();
@@ -50,12 +50,22 @@ export const SessionAdmin = () => {
     }
     })
 
-    console.log(id);
-    console.log(ballSpeed);
-    console.log(direction);
-    console.log(ballShape);
-    console.log(patient);
-    console.log(hasBallStarted);
+    const [modal, toggleModal] = useState(false)
+
+    const handleOpenModal = () => {
+        toggleModal(true)
+    }
+    const handleCloseModal = () => {
+        console.log("modal closed");
+        
+        toggleModal(false)
+    }
+
+    const deleteSessionConfirmed = () => {
+        console.log("SESSION DELETED");
+        
+        dispatch(deleteSession({_id: id}, sessionId))
+    }
 
     return (
         <div className="" >
@@ -107,7 +117,7 @@ export const SessionAdmin = () => {
                         <div className="mt-3">
                             <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => dispatch(updateSession({ isActive: false, _id: id }, sessionId))} ><span><Pause size={20} /></span> Pause</button>
                             <button type="button" className="btn btn-outline-primary ml-2 btn-sm" onClick={() => dispatch(updateSession({ isActive: true, _id: id }, sessionId))} ><span><Play size={20} /> </span>Resume</button>
-                            <button type="button" className="btn btn-outline-danger ml-2 btn-sm" onClick={() => dispatch(deleteSession({_id: id}, sessionId))} ><span><XSquare size={20} /> </span>Çıkış</button>
+                            <button type="button" className="btn btn-outline-danger ml-2 btn-sm" onClick={handleOpenModal} ><span><XSquare size={20} /> </span>Çıkış</button>
                         </div>
 
                     </div>
@@ -117,6 +127,7 @@ export const SessionAdmin = () => {
                     <Session />
             </div>
             </div>
+            <DeleteModal show={modal} title={"Seansı"} handleCloseModal={handleCloseModal} deleteComfirmed={deleteSessionConfirmed} />
         </div>
     )
 }

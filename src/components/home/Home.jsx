@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import { getSessionInfo } from '../../actions/sessionActions'
 import background from './bg-masthead.jpg'
+
 import './home.css'
 
 
@@ -17,8 +18,8 @@ const Home = () => {
     console.log(sessionId);
     return (
         <div >
-            <div /* style={{height: '500rem'}} */>
-                <header className="masthead text-white text-center" style={{ background: `url(${background})no-repeat center center`, backgroundSize: 'cover', /* height: '50vh' */ }}>
+            <div style={{height: '50vh'}}>
+                <header className="masthead text-white text-center" style={{ background: `url(${background})no-repeat center center`, backgroundSize: 'cover', height: '100%' }}>
                     <div className="overlay" />
                     <div className="container">
                         <div className="row">
@@ -43,8 +44,8 @@ const Home = () => {
                 </header>
 
             </div>
-            <div>
-                <section className="features-icons bg-light text-center">
+            <div style={{height: "50vh"}} >
+                <section className="features-icons bg-light text-center" style={{height: "100%"}}>
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-4">
@@ -73,7 +74,6 @@ const Home = () => {
                 </section>
 
             </div>
-
         </div>
     )
 }
