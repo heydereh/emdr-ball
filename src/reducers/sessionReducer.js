@@ -108,6 +108,8 @@ const sessionReducer = (state = initialState, action) => {
                 isActive: action.payload.isActive,
                 hasBallStarted: action.payload.hasBallStarted,
                 drName: action.payload.drName,
+                isSoundPlaying: action.payload.isSoundPlaying,
+                sound: action.payload.sound,
             }
         case GET_SESSION_INFO_ERROR:
             return {

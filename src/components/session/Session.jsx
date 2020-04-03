@@ -4,9 +4,10 @@ import { useRouteMatch } from "react-router-dom";
 import { getSessionInfo } from '../../actions/sessionActions'
 import injectStyle from '../../helpers/incejctStyle';
 import socketIOClient from "socket.io-client";
-import drip1 from './short-drip.wav'
-import drip2 from './short-drip2.wav'
-// 
+import drip from './drip.wav'
+import drop from './drop.wav'
+import ReactInterval from 'react-interval';
+
 
 export const Session = (props) => {
     let match = useRouteMatch();
@@ -16,7 +17,7 @@ export const Session = (props) => {
     const dispatch = useDispatch();
 
     // mapStateToProps alternatifi hook
-    const { patient, ballShape, drName, ballSpeed, isActive, direction } = useSelector(state => {
+    const { patient, ballShape, drName, ballSpeed, isActive, isSoundPlaying, sound } = useSelector(state => {
         // console.log(state);
         return {
             patient: state.currentSession.patient,
@@ -25,6 +26,8 @@ export const Session = (props) => {
             direction: state.currentSession.direction,
             ballSpeed: state.currentSession.ballSpeed,
             isActive: state.currentSession.isActive,
+            sound: state.currentSession.sound,
+            isSoundPlaying: state.currentSession.isSoundPlaying,
         }
     })
     console.log(ballSpeed);
@@ -39,7 +42,10 @@ export const Session = (props) => {
 `;
     // Keyframes inject
     injectStyle(keyframesStyle);
-
+    socket.on('disconnect', () => {
+        console.log("socket bağlantısı " + socket.connected);
+        
+    })
     // ComponentDidMount
     useEffect(() => {
 
@@ -64,8 +70,8 @@ export const Session = (props) => {
         },
     }
 
-    const [play, togglePlay] = useState(false)
-    const [sound, setSound] = useState(drip1)
+    const soundToPlay = new Audio(sound === 'drip' ? drip : drop)
+    const playSound = () => soundToPlay.play();
 
     const shape = new Map();
 
@@ -117,12 +123,10 @@ export const Session = (props) => {
                 {/* `Hasta adi: {this.props.patient && this.props.patient}` */}
             </div>
 
-            {/* <div className="px-2"> */}
             <div className="pt-4 pl-3" style={style.container}>
                 <div style={shape.get(`${ballShape}`)} ></div>
             </div>
-            {/* </div> */}
-
+        {/* <ReactInterval timeout={((speedArray[ballSpeed] * 1000) / 2)} enabled={isActive && isSoundPlaying} callback={() => {console.log(((speedArray[ballSpeed] * 1000) / 2)); playSound()}} /> */}
         </div>
     )
 }

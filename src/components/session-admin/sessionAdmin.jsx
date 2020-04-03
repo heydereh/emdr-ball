@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch, useHistory } from "react-router-dom";
-import { Pause, Play, XSquare } from 'react-feather';
+import { Pause, Play, XSquare, Music } from 'react-feather';
 import { updateSession, getSessionInfo, deleteSession } from '../../actions/sessionActions'
 import socketIOClient from "socket.io-client";
 import { Session } from '../session/Session'
@@ -31,7 +31,7 @@ export const SessionAdmin = () => {
         dispatch(getSessionInfo(sessionId));
     }, [])
 
-    const { patient, ballShape, direction, ballSpeed, hasBallStarted, sessionDeleteLoaded } = useSelector(state => ({
+    const { ballShape, ballSpeed, sessionDeleteLoaded, sound, isSoundPlaying } = useSelector(state => ({
         id: state.currentSession._id,
         patient: state.currentSession.patient,
         ballShape: state.currentSession.ballShape,
@@ -39,10 +39,13 @@ export const SessionAdmin = () => {
         ballSpeed: state.currentSession.ballSpeed,
         hasBallStarted: state.currentSession.hasBallStarted,
         sessionDeleteLoaded: state.currentSession.sessionDeleteLoaded,
+        sound: state.currentSession.sound,
+        isSoundPlaying: state.currentSession.isSoundPlaying,
     }))
     // bunu yukarıdaki gruba ekleyince alamadı bi türlü
     const id = useSelector(state => state.currentSession._id);
-
+    console.log("sound " + sound + " " + isSoundPlaying);
+    
 
     /**
      * Burada saçma işler döndü ben de tam anlamadım özetle
@@ -81,6 +84,8 @@ export const SessionAdmin = () => {
         dispatch(deleteSession({_id: id}, sessionId))
     }
 
+    
+
     return (
         <div className="" >
             <div className="row" style={{ height: "100vh", }}>
@@ -95,7 +100,7 @@ export const SessionAdmin = () => {
                     </div>
                     <div className="mt-2" id="speed-slider">
                         <input style={{}} type="range" min="0" max="9" value={speedOfBall} className="slider w-100" onChange={(e) => setSpeed(e.target.value)} id="myRange" />
-                        <button style={{backgroundColor: colorButton}} className="btn" onClick={() => dispatch(updateSession({ ballSpeed: speedOfBall, _id: id }, sessionId))} >Apply Speed</button>
+                        <button style={{backgroundColor: colorButton}} className="btn text-light" onClick={() => dispatch(updateSession({ ballSpeed: speedOfBall, _id: id }, sessionId))} >Apply Speed</button>
                     </div>
                     <div className="mt-2">
                         SET SHAPE
@@ -128,6 +133,34 @@ export const SessionAdmin = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="mt-2">
+                        SET SOUND
+                    </div>
+                    <div className="mt-2 ml-3 mr-3" id="soundRadioGroup" onChange={(e) => dispatch(updateSession({ sound: e.target.value, _id: id }, sessionId))}>
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="form-check">
+                                     {/* default check calismadi mecbut boyle uzun yoldan yaptim */}
+                                    {sound === 'drip' ? <input className="form-check-input" type="radio" name="soundRadios" id="dripRadio" value="drip" defaultChecked /> : <input className="form-check-input" type="radio" name="soundRadios" id="dripRadio" value="drip" /> }
+                                    <label className="form-check-label" htmlFor="dripRadio">
+                                        Drip
+                                    </label>
+                                </div>
+                            </div>
+                            <div className="col-sm">
+                                <div className="form-check">
+                                    {/* default check calismadi mecbut boyle uzun yoldan yaptim */}
+                                {sound === 'drop' ? <input className="form-check-input" type="radio" name="soundRadios" id="dropRadio" value="drop" defaultChecked /> : <input className="form-check-input" type="radio" name="soundRadios" id="dropRadio" value="drop" /> }
+                                    <label className="form-check-label" htmlFor="dropRadio">
+                                        Drop
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                            <button type="button" className="btn btn-outline-info btn-sm" onClick={() => dispatch(updateSession({ isSoundPlaying: !isSoundPlaying, _id: id }, sessionId))} ><span><Music /></span><span>{isSoundPlaying ? <Pause size={20} /> : <Play size={20} />}</span> {isSoundPlaying ? 'Pause' : 'Resume'}</button>
+                            </div>
+                        </div>
+                    </div> {/** sound radio group end */}
                     <div className="mt-3">
                         <button type="button" className="btn btn-outline-info btn-sm" onClick={() => dispatch(updateSession({ isActive: false, _id: id }, sessionId))} ><span><Pause size={20} /></span> Pause</button>
                         <button type="button" className="btn btn-outline-info ml-2 btn-sm" onClick={() => dispatch(updateSession({ isActive: true, _id: id }, sessionId))} ><span><Play size={20} /> </span>Resume</button>
