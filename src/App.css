@@ -6,6 +6,14 @@
     font-family: 'Noto Sans', sans-serif;
 }
 
+.bg-secondary {
+    /* background-color:  !important; */
+}
+
+.appbar-bg {
+    background-color: #17a2b8 !important;
+}
+
 /* .admin-container {
   display: inline !important;
 } */

@@ -9,14 +9,15 @@ import Appbar from './components/appbar/Appbar';
 import {Admin} from './components/admin/Admin';
 import {Session} from './components/session/Session';
 import { SessionAdmin } from './components/session-admin/sessionAdmin';
+import { colorBackground } from './/helpers/colors';
 
 const history = createBrowserHistory();
 
 function App() {
   return (
     <BrowserRouter history={history} >
-      <div >
-        <div>
+      <div style={{backgroundColor: colorBackground}} >
+        <div >
           <Appbar />
         </div>
         <div id="main-container">

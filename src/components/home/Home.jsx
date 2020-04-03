@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import { getSessionInfo } from '../../actions/sessionActions'
 import background from './bg-masthead.jpg'
-
+import { colorButton } from '../../helpers/colors'
 import './home.css'
 
 
@@ -30,12 +30,12 @@ const Home = () => {
                                 <form>
                                     <div className="form-row">
                                         <div className="col-12 col-md-9 mb-2 mb-md-0"><input onChange={(event) => setsessionId(event.target.value)} type="email" className="form-control form-control-lg" placeholder="Seans numaranızı giriniz..." /></div>
-                                        <div className="col-12 col-md-3"><button className="btn btn-primary btn-block btn-lg" type="submit">
+                                        <div className="col-12 col-md-3"><button className="btn btn-block btn-lg" type="submit" style={{backgroundColor: colorButton, color: 'inherit'}}>
                                             <Link
                                                 className=""
                                                 style={{ textDecoration: "inherit", color: "inherit", }}
                                                 to={location => { dispatch(getSessionInfo(sessionId)); return { ...location, pathname: `/${sessionId}` } }}
-                                            >Seans'a Giriş</Link></button></div>
+                                            >Giriş</Link></button></div>
                                     </div>
                                 </form>
                             </div>

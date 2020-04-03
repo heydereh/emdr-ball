@@ -1,0 +1,6 @@
+export const colorBackground = "#E8E9EB"
+export const colorNavbar = "#17a2b8"
+export const colorButton = "#17a2b8"
+export const colorDark = "#505168"
+export const colorLightGreen = "#A9E5BB"
+export const colorLightGrey = "#8693AB "
