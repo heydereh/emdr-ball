@@ -29,7 +29,7 @@ const Home = () => {
                             <div className="col-md-10 col-lg-8 col-xl-7 mx-auto">
                                 <form>
                                     <div className="form-row">
-                                        <div className="col-12 col-md-9 mb-2 mb-md-0"><input onChange={(event) => setsessionId(event.target.value)} type="email" className="form-control form-control-lg" placeholder="Seans numaranızı giriniz..." /></div>
+                                        <div className="col-12 col-md-9 mb-2 mb-md-0"><input onChange={(event) => setsessionId(event.target.value)} type="text" className="form-control form-control-lg" placeholder="Seans numaranızı giriniz..." /></div>
                                         <div className="col-12 col-md-3"><button className="btn btn-block btn-lg" type="submit" style={{backgroundColor: colorButton, color: 'inherit'}}>
                                             <Link
                                                 className=""

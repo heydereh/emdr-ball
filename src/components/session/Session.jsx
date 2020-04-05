@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteMatch } from "react-router-dom";
 import { getSessionInfo } from '../../actions/sessionActions'
 import injectStyle from '../../helpers/incejctStyle';
 import socketIOClient from "socket.io-client";
-import drip from './drip.wav'
-import drop from './drop.wav'
+import drip from './drip.mp3'
+import drop from './drop.mp3'
 import ReactInterval from 'react-interval';
 
 
@@ -31,8 +31,7 @@ export const Session = (props) => {
         }
     })
     console.log(ballSpeed);
-    
-    // TODO isactive false olduğunda bu inject işlemini nası geri alacağımı düşünmem lazım
+
     const keyframesStyle = `
     @keyframes mymoveSession {
         0%   {left: 0px; }
@@ -44,11 +43,10 @@ export const Session = (props) => {
     injectStyle(keyframesStyle);
     socket.on('disconnect', () => {
         console.log("socket bağlantısı " + socket.connected);
-        
+
     })
     // ComponentDidMount
     useEffect(() => {
-
         // console.log(socket);
         socket.on("fromServer", data => {
             console.log(data);
@@ -71,7 +69,10 @@ export const Session = (props) => {
     }
 
     const soundToPlay = new Audio(sound === 'drip' ? drip : drop)
-    const playSound = () => soundToPlay.play();
+    const playSound = () => {
+        console.log("SOUND PLAYING");
+        soundToPlay.play()
+    };
 
     const shape = new Map();
 
@@ -107,10 +108,10 @@ export const Session = (props) => {
 
     // admin or patient page 
 
-    const inAdminPage = <div className="ml-3">Hasta adı: <strong>{patient}.</strong></div>
+    const inAdminPage = <div className="ml-3">Hasta adı: <strong className="text-capitalize">{patient}.</strong></div>
     const inSessionPage = <div>
-        <div className="border-bottom-dark ml-3">Sayın <strong>{patient}</strong>, seansınıza hoşgeldiniz. Doktorunuz birazdan seansı başlatacaktır.</div>
-        <div className="ml-3 mt-1">Doktor adı: <strong>{drName}.</strong></div>
+        <p className="border-bottom-dark ml-3">Sayın <strong className="text-capitalize">{patient}</strong>, seansınıza hoşgeldiniz. Doktorunuz birazdan seansı başlatacaktır.</p>
+        <p className="ml-3 mt-0">Doktor adı: <strong className="text-capitalize">{drName}.</strong></p>
     </div>
 
     return (
@@ -118,15 +119,13 @@ export const Session = (props) => {
             <div className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3">
                 {props.admin ? inAdminPage : inSessionPage}
             </div>
-            {/* <button onClick={() => socket.emit('react', { hello: 'from client' })} >send msg</button> */}
             <div>
-                {/* `Hasta adi: {this.props.patient && this.props.patient}` */}
             </div>
 
             <div className="pt-4 pl-3" style={style.container}>
                 <div style={shape.get(`${ballShape}`)} ></div>
             </div>
-        {/* <ReactInterval timeout={((speedArray[ballSpeed] * 1000) / 2)} enabled={isActive && isSoundPlaying} callback={() => {console.log(((speedArray[ballSpeed] * 1000) / 2)); playSound()}} /> */}
+            <ReactInterval timeout={((speedArray[ballSpeed] * 1000) / 2)} enabled={isActive && isSoundPlaying} callback={() => { console.log(((speedArray[ballSpeed] * 1000) / 2)); playSound() }} />
         </div>
     )
 }

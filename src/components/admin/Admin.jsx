@@ -47,8 +47,8 @@ export const Admin = () => {
                             <div className="m-auto w-lg-75 w-xl-50">
                                 <h2 className="text-info font-weight-light mb-5"><i className="fa fa-diamond" />&nbsp;Seans Oluştur</h2>
                                 <form onSubmit={handleSubmit} >
-                                    <div className="form-group"><label className="text-secondary">Adınız<span><label style={{ fontSize: "smaller" }}><sub>* Danışanınızın ekranında görünecek isminiz</sub></label></span></label><input className="form-control" type="text" required onChange={(e) => setDrName(e.target.value)} /></div>
-                                    <div className="form-group"><label className="text-secondary">Danışan Adı<span><label style={{ fontSize: "smaller" }}><sub>* Danışanınızı seansta karşılamak için..</sub></label></span></label><input className="form-control" type="text" required onChange={(e) => setPatientName(e.target.value)} /></div>
+                                    <div className="form-group"><label className="text-secondary">Adınız<span><label style={{ fontSize: "smaller" }}><sub>* Danışanınızın ekranında görünecek isminiz</sub></label></span></label><input maxLength={20} className="form-control" type="text" required onChange={(e) => setDrName(e.target.value)} /></div>
+                                    <div className="form-group"><label className="text-secondary">Danışan Adı<span><label style={{ fontSize: "smaller" }}><sub>* Danışanınızı seansta karşılamak için..</sub></label></span></label><input maxLength={20} className="form-control" type="text" required onChange={(e) => setPatientName(e.target.value)} /></div>
                                     <button className="btn btn-info mt-2" type="submit">Oluştur</button></form>
 
                             </div>
