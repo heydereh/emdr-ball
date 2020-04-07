@@ -1,12 +1,12 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom';
-import { colorNavbar, colorDark } from '../../helpers/colors'
+import { colorNavbar } from '../../helpers/colors'
 
 
 const Appbar = () => {
 
     const location = useLocation();
-    console.log(location);
+    // console.log(location);
     
 
     return (

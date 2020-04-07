@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Home from './components/home/Home';
 import Appbar from './components/appbar/Appbar';
@@ -15,9 +15,9 @@ const history = createBrowserHistory();
 
 function App() {
   return (
-    <BrowserRouter history={history} >
-      <div style={{backgroundColor: colorBackground}} >
-        <div >
+    <Router history={history} >
+      <div className="" style={{backgroundColor: colorBackground}} >
+        <div  >
           <Appbar />
         </div>
         <div id="main-container">
@@ -51,7 +51,7 @@ function App() {
           </Switch>
           </div>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 

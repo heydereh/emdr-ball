@@ -54,7 +54,11 @@ export const Admin = () => {
                             </div>
                         </div>
                         <div className="col-lg-6 d-flex align-items-end" id="bg-block" style={{ backgroundImage: `url(${EyePhoto})`, backgroundSize: 'cover', backgroundPosition: 'center center' }}>
-                            <p className="ml-auto small text-dark mb-2"><em>Photo by&nbsp;</em><a className="text-dark" href="https://unsplash.com/photos/v0zVmWULYTg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank"><em>Aldain Austria</em></a><br /></p>
+                            <p className="ml-auto small text-dark mb-2">
+                                <em>Photo by&nbsp;</em>
+                                <a className="text-dark" href="https://unsplash.com/photos/v0zVmWULYTg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer"><em>Aldain Austria</em></a>
+                                <br />
+                                </p>
                         </div>
                     </div>
                 </div>
@@ -63,29 +67,3 @@ export const Admin = () => {
            
     )
 }
-
- {/* daha önce oluşturulmuş session a admin olarak girme işi iptal. admin sayfası kapatılınca seansı sonlandırıyoruz artık */}
-            {/*  <div className="input-group container-md mt-4 ml-1 flex-wrap">
-                <input className="form-control sm" type="text" onChange={(event) => setsessionId(event.target.value)} />
-                <div className="input-group-append"><button className="btn btn-primary" type="button">
-                    <Link
-                        className="btn btn-outline-primary"
-                        style={{ textDecoration: "none", color: "inherit", lineHeight: "0.4" }}
-                        to={`/admin/${sessionId}`}
-                    >Seansa Gir</Link></button>
-                </div>
-            </div> */}
-
-
-// const mapStateToProps = (state) => {
-//     console.log(state);
-
-//     return {
-
-//     }
-// }
-
-// const mapDispatchToProps = {
-//     startSession: createSession,
-// }
-// export default connect(mapStateToProps, mapDispatchToProps)(Admin)

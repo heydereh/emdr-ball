@@ -76,7 +76,7 @@ import axios from 'axios';
         await axios
             .get(`${SERVER_URL}/api/v1/sessions/${sessionId}`)
             .then(({ data }) => {
-                console.log(data);
+                // console.log(data);
                 
                 if (data.success) {
                     dispatch({
