@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSessionInfo } from "../../actions/sessionActions";
@@ -14,17 +14,31 @@ const Home = () => {
   const [sessionId, setsessionId] = useState("");
   // console.log(sessionId);
 
-  const { getSessionError, getSessionLoaded } = useSelector((state) => {
-    // console.log(state);
+  const { getSessionError, getSessionLoaded, loadedSessionId } = useSelector(
+    (state) => {
+      // console.log(state);
 
-    return {
-      getSessionLoaded: state.currentSession.getSessionLoaded,
-      getSessionError: state.currentSession.getSessionError,
-    };
-  });
+      return {
+        getSessionLoaded: state.currentSession.getSessionLoaded,
+        getSessionError: state.currentSession.getSessionError,
+        loadedSessionId: state.currentSession.sessionId,
+      };
+    }
+  );
   console.log(getSessionError);
   console.log(getSessionLoaded);
   
+  const [errorString, setErrorString] = useState("")
+
+  useEffect(() => {
+    if (getSessionLoaded) {
+      history.push(`/${loadedSessionId}`);
+    }
+    if (getSessionError) {
+        setErrorString(getSessionError.response.data.error)
+    }
+  });
+
   const handleSubmit = (e) => {
     dispatch(getSessionInfo(sessionId));
   };
@@ -79,6 +93,19 @@ const Home = () => {
                 </form>
               </div>
             </div>
+
+
+            {getSessionError && getSessionError.response &&
+          getSessionError.response.data &&
+          getSessionError.response.data.error && <div className="row">
+              <div className="col-xl-7 col-lg-8 col-md-10 mx-auto">
+                <div className="alert alert-danger fluid" role="alert">
+                {errorString}
+                </div>
+              </div>
+            </div>}
+
+
           </div>
         </header>
       </div>
