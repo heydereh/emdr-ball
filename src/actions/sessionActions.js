@@ -14,14 +14,14 @@ import {
     SERVER_URL,
  } from '../actions/actionConstants';
 import axios from 'axios';
-
+import Cookies from 'js-cookie';
 
 
  export const createSession = (options) => {
     const newSessionId = Date.now()
     const pseudoOptions = {
         sessionId: newSessionId,
-        patient: "Hasta 1",
+        patient: "Danisan 1",
         ballShape: "circle",
         direction: "right",
         ballSpeed: 5,
@@ -50,6 +50,13 @@ import axios from 'axios';
                         type: SESSION_CREATE_DONE,
                         payload: data.data
                     })
+                    const forCookie = JSON.stringify({
+                        patient: data.data.patient,
+                        sessionId: data.data.sessionId,
+                        createdAt: data.data.createdAt,
+                    })
+                    Cookies.set(`${data.data.sessionId}`, forCookie, { expires: 1 });
+                    
                 } else {
                     // Bu kısımlar sonra
                     throw new Error(data.error)

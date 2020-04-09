@@ -26,7 +26,7 @@ import copy from "copy-to-clipboard";
 export const SessionAdmin = () => {
   let history = useHistory();
   let match = useRouteMatch();
-  console.log(window.location.origin);
+  // console.log(window.location.origin);
 
   const sessionId = match.params.sessionId;
   const socket = socketIOClient(`http://localhost:5050`);
@@ -103,17 +103,22 @@ export const SessionAdmin = () => {
     dispatch(deleteSession({ _id: id }, sessionId));
   };
 
-  const [btnText, setBtnText] = useState("Copy");
+  const [sessionIdCopyBtnText, setSessionIdCopyBtnText] = useState("Copy");
+  const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState("Copy");
 
-  const handleCopyToClipboard = () => {
-    setBtnText("Copied");
+  const handleSessionIdCopyToClipboard = () => {
+    setSessionIdCopyBtnText("Copied");
     copy(sessionId);
+  };
+  const handleSessionLinkCopyToClipboard = () => {
+    setSessionLinkCopyBtnText("Copied");
+    copy(shareUrlString);
   };
 
   const shareUrlString = `${window.location.origin}/${sessionId}`;
 
   return (
-    <div className="">
+    <div className="color-background">
       <div
         className="row"
         style={{ height: "100vh", marginRight: "0px", marginLeft: "0px" }}
@@ -127,13 +132,32 @@ export const SessionAdmin = () => {
                 <button
                   className="btn btn-outline-secondary"
                   type="button"
-                  onClick={handleCopyToClipboard}
+                  onClick={handleSessionIdCopyToClipboard}
                 >
-                  {btnText}
+                  {sessionIdCopyBtnText}
+                </button>
+              </div>
+            </div>
+
+            <div className="input-group mb-3">
+              <input
+              style={{backgroundColor: "inherit", borderStyle: "none"}}
+                type="text"
+                className="form-control over-flow"
+                value="Seans Linkini kopyala.."
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={handleSessionLinkCopyToClipboard}
+                >
+                  {sessionLinkCopyBtnText}
                 </button>
               </div>
             </div>
           </div>
+          <h6 className="ml-2">Diğer platformlardan paylaş..</h6>
           <div className="ml-2">
             <EmailShareButton
               subject="Emdr Eye Theraphy Seans giriş linki"
@@ -151,7 +175,7 @@ export const SessionAdmin = () => {
               <LinkedinIcon size={32} />
             </LinkedinShareButton>
           </div>
-          <div className="ml-2">
+          <div className="ml-2 mt-3">
             <div className="mt-2">{`SET SPEED [${speedOfBall}]`}</div>
             <div className="mt-2" id="speed-slider">
               <input
@@ -340,10 +364,9 @@ export const SessionAdmin = () => {
                   </button>
                 </div>
               </div>
-              
             </div>{" "}
             {/** sound radio group end */}
-            <div className="mt-3 mb-2 mr-2 btn-group" >
+            <div className="mt-3 mb-2 mr-2 btn-group">
               <button
                 type="button"
                 className="btn btn-outline-info btn-sm"

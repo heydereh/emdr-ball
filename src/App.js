@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 
@@ -9,16 +9,19 @@ import Appbar from './components/appbar/Appbar';
 import {Admin} from './components/admin/Admin';
 import {Session} from './components/session/Session';
 import { SessionAdmin } from './components/session-admin/sessionAdmin';
-import { colorBackground } from './/helpers/colors';
 
 const history = createBrowserHistory();
 
-function App() {
+const App = () => {
+  // BURADA location kullanilamiyor :)
+  // const location = useLocation();
+  const [cinemaMod, setCinemaMod] = useState(false)
+  // const isAdmin = location.pathname.includes('admin')
   return (
     <Router history={history} >
-      <div className="" style={{backgroundColor: colorBackground}} >
+      <div className={`${(cinemaMod) ? 'opacity-1' : 'color-background'}`} style={{}} >
         <div  >
-          <Appbar />
+          <Appbar cinemaMod={cinemaMod} toggleCinemaMod={setCinemaMod} />
         </div>
         <div id="main-container">
           <Switch >
@@ -45,7 +48,7 @@ function App() {
             <Route
               path="/:sessionId"
               exact
-              component={() => <Session />}
+              component={() => <Session cinemaMod={cinemaMod} toggleCinemaMod={setCinemaMod} />}
             />
 
           </Switch>
