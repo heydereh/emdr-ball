@@ -75,8 +75,10 @@ export const Session = (props) => {
     };
 
     const shape = new Map();
+    const marginTopp = "";
 
     shape.set('square', {
+        marginTop: marginTopp,
         width: "5rem",
         height: "5rem",
         background: '#990000',
@@ -86,6 +88,7 @@ export const Session = (props) => {
         animationTimingFunciton: 'linear',
     })
     shape.set('circle', {
+        marginTop: marginTopp,
         width: "6rem",
         height: "6rem",
         background: '#990000',
@@ -96,6 +99,7 @@ export const Session = (props) => {
         animationTimingFunciton: 'linear',
     })
     shape.set('diamond', {
+        marginTop: marginTopp,
         position: "relative",
         backgroundColor: '#990000',
         height: "5rem",
@@ -115,7 +119,7 @@ export const Session = (props) => {
     </div>
 
     return (
-        <div className="" style={{ height: "100vh" }} >
+        <div className="" style={{ height: "100vh"}} >
             <div className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3">
                 {props.admin ? inAdminPage : inSessionPage}
             </div>
@@ -123,7 +127,7 @@ export const Session = (props) => {
             </div>
 
             <div className="pt-4 pl-3" style={style.container}>
-                <div style={shape.get(`${ballShape}`)} ></div>
+                <div className="mt-4" style={shape.get(`${ballShape}`)} ></div>
             </div>
             <ReactInterval timeout={((speedArray[ballSpeed] * 1000) / 2)} enabled={isActive && isSoundPlaying} callback={() => { console.log(((speedArray[ballSpeed] * 1000) / 2)); playSound() }} />
         </div>
