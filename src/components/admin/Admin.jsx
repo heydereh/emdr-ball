@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import EyePhoto from "./eye-macro.jpg";
 import Cookies from "js-cookie";
 import { colorNavbar } from "../../helpers/colors";
+import { hours } from "../../helpers/timeConversions";
 
 import "./admin.css";
 
@@ -52,6 +53,10 @@ export const Admin = () => {
   const oldSessionsArrayOfObject = oldSessions.map((sessionStringArray) =>
     JSON.parse(sessionStringArray[1])
   );
+
+  // const oldDate = new Date.prototype.constructor(
+  //   Date.parse(oldSessionsArrayOfObject[0].createdAt)
+  // );
 
   return (
     <div /* style={{height: "100%"}} */>
@@ -106,12 +111,15 @@ export const Admin = () => {
                 </button>
               </form>
               {/* Old Sessions List Start */}
-              <div
-                className="list-group mt-3"
-                
-              >
-                <div style={{backgroundColor: colorNavbar, borderColor: colorNavbar}} className="list-group-item list-group-item-action active d-flex w-100 justify-content-between">
-                  <h6  className="mb-1">
+              <div className="list-group mt-3">
+                <div
+                  style={{
+                    backgroundColor: colorNavbar,
+                    borderColor: colorNavbar,
+                  }}
+                  className="list-group-item list-group-item-action active d-flex w-100 justify-content-between"
+                >
+                  <h6 className="mb-1">
                     Son 24 saat içerisindeki seanslarınız..
                   </h6>
                 </div>
@@ -122,6 +130,10 @@ export const Admin = () => {
                       const createdDateInstance = new Date.prototype.constructor(
                         Date.parse(oldSession.createdAt)
                       );
+                      const difference = hours(
+                        new Date() - createdDateInstance
+                      );
+
                       return (
                         <a
                           key={index}
@@ -132,10 +144,8 @@ export const Admin = () => {
                         >
                           <div className="d-flex w-100 justify-content-between">
                             <h5 className="mb-1">{oldSession.patient}</h5>
-                            <small className="text-muted">
-                              {new Date().getHours() -
-                                createdDateInstance.getHours()}{" "}
-                              saat önce
+                            <small className="text-muted ml-1">
+                              {difference} saat önce
                             </small>
                           </div>
                         </a>
