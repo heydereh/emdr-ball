@@ -19,20 +19,8 @@ import Cookies from 'js-cookie';
 
  export const createSession = (options) => {
     const newSessionId = Date.now()
-    const pseudoOptions = {
-        sessionId: newSessionId,
-        patient: "Danisan 1",
-        ballShape: "circle",
-        direction: "right",
-        ballSpeed: 5,
-        isActive: true,
-    }
-    if (!options) {
-        options = pseudoOptions;
-    } else {
-        options.sessionId = newSessionId
-    }
-    // console.log(`SESSION ID: ${sessionId} START`);
+    options.sessionId = newSessionId
+    console.log(options);
     
     return async dispatch => {
         console.log(options);

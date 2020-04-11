@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import { getSessionInfo } from "../../actions/sessionActions";
@@ -7,6 +7,7 @@ import socketIOClient from "socket.io-client";
 import drip from "./drip.mp3";
 import drop from "./drop.mp3";
 import ReactInterval from "react-interval";
+import useWindowSize from '../../helpers/useWindowSize'
 
 export const Session = (props) => {
   let match = useRouteMatch();
@@ -141,9 +142,34 @@ export const Session = (props) => {
     </div>
   );
 
+    // Scroll to animation component
+    const useScroll = () => {
+      const htmlElRef = useRef(null)
+      const executeScroll = () => window.scrollTo({behavior: 'smooth', top: htmlElRef.current.offsetTop})
+    
+      return [executeScroll, htmlElRef]
+    }
+    const [ executeScroll, htmlElRef ] = useScroll();
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        executeScroll()
+      }, 1000);
+      return () => clearTimeout(timer);
+    }, [])
+    useEffect(() => {
+      return executeScroll
+    }, [props.cinemaMod])
+    // Scroll to animation component end
+
+   // window size for add container class for widescreen
+   const size = useWindowSize();
+   console.log(size);
+   
+
+
   return (
-    <div className="" style={{ height: "100vh" }}>
-      <div className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3">
+    <div  className={`${size.width > 999 ? 'container' : ''}`} style={{ height: "100vh" }}>
+      <div ref={htmlElRef} className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3">
         {props.admin ? inAdminPage : inSessionPage}
       </div>
       <div>
@@ -156,12 +182,12 @@ export const Session = (props) => {
               props.toggleCinemaMod(!props.cinemaMod);
             }}
           >
-            {`Focus Mod ${props.cinemaMod ? "Off" : "On"}`}
+            {`Turn Focus Mod ${props.cinemaMod ? "Off" : "On"}`}
           </button>
         )}
       </div>
-      <div className="pt-4 pl-3" style={style.container}>
-        <div className="mt-4" style={shape.get(`${ballShape}`)}></div>
+      <div  className="pt-4 pl-3" style={style.container}>
+        <div  className="mt-4" style={shape.get(`${ballShape}`)}></div>
       </div>
       <ReactInterval
         timeout={(speedArray[ballSpeed] * 1000) / 2}

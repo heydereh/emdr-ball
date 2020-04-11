@@ -29,8 +29,8 @@ export const Admin = () => {
     e.preventDefault();
     dispatch(
       createSession({
-        drName,
-        patient,
+        drName: drName.toLowerCase().trim(),
+        patient: patient.toLowerCase().trim(),
       })
     );
   };
@@ -57,6 +57,7 @@ export const Admin = () => {
   // const oldDate = new Date.prototype.constructor(
   //   Date.parse(oldSessionsArrayOfObject[0].createdAt)
   // );
+
 
   return (
     <div /* style={{height: "100%"}} */>

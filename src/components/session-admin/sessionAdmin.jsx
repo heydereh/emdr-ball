@@ -121,7 +121,7 @@ export const SessionAdmin = () => {
     <div className="color-background">
       <div
         className="row"
-        style={{ height: "100vh", marginRight: "0px", marginLeft: "0px" }}
+        style={{ height: "110vh", marginRight: "0px", marginLeft: "0px" }}
       >
         <div className="col-4 border border-dark">
           <div className="ml-2">
