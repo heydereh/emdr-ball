@@ -48,16 +48,28 @@ export const Admin = () => {
   });
 
   // Bu object array i donuyor
+  console.log(Object.entries(Cookies.get()));
+
   const oldSessions = Object.entries(Cookies.get());
   // her bir entry si yine array bu array in 2. elemani bize lazim olan obje
-  const oldSessionsArrayOfObject = oldSessions.map((sessionStringArray) =>
-    JSON.parse(sessionStringArray[1])
-  );
+  const oldSessionsArrayOfObject = [];
+  // yukarida cookielerin hepsi alindigi icin parse edilebilir olanlari almam gerekti
+  oldSessions.map((sessionStringArray) => {
+    let parsedJson = "";
+    try {
+      parsedJson = JSON.parse(sessionStringArray[1])
+      oldSessionsArrayOfObject.push(parsedJson);
+      return true
+    } catch (error) {
+      return false
+    }
+    
+  });
+  console.log(oldSessionsArrayOfObject);
 
   // const oldDate = new Date.prototype.constructor(
   //   Date.parse(oldSessionsArrayOfObject[0].createdAt)
   // );
-
 
   return (
     <div /* style={{height: "100%"}} */>
