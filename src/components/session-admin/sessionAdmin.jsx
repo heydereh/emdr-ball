@@ -25,6 +25,7 @@ import copy from "copy-to-clipboard";
 
 export const SessionAdmin = () => {
   let history = useHistory();
+  const handleQuit = () => history.push("/admin")
   let match = useRouteMatch();
   // console.log(window.location.origin);
 
@@ -47,6 +48,7 @@ export const SessionAdmin = () => {
   }, []);
 
   const {
+    
     ballShape,
     ballSpeed,
     sessionDeleteLoaded,
@@ -404,7 +406,7 @@ export const SessionAdmin = () => {
                 type="button"
                 className="btn btn-outline-danger ml-2 btn-sm"
                 // onClick={handleOpenModal} // seans silmeyi kaldirdik
-                onClick={() => history.push("/admin")}
+                onClick={handleQuit}
               >
                 <span>
                   <XSquare size={20} />{" "}
