@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,8 +26,8 @@ const Home = () => {
       };
     }
   );
-  console.log(getSessionError);
-  console.log(getSessionLoaded);
+  // console.log(getSessionError);
+  // console.log(getSessionLoaded);
   
   const [errorString, setErrorString] = useState("")
 
@@ -37,7 +38,7 @@ const Home = () => {
     if (getSessionError) {
         setErrorString(getSessionError.response.data.error)
     }
-  });
+  }, []); // burada eslint hata veriyodu kaldirttim
 
   const handleSubmit = (e) => {
     dispatch(getSessionInfo(sessionId));

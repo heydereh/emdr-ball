@@ -31,11 +31,11 @@ export const SessionAdmin = () => {
   const sessionId = match.params.sessionId;
   const socket = socketIOClient(`http://localhost:5050`);
   socket.on("connect", () => {
-    console.log("Socket Bağlantısı : " + socket.connected);
+    // console.log("Socket Bağlantısı : " + socket.connected);
   });
   // yukarıdaki ve bu calisiyor
   socket.on("disconnect", () => {
-    console.log("Socket Bağlantısı : " + socket.connected);
+    // console.log("Socket Bağlantısı : " + socket.connected);
   });
 
   const dispatch = useDispatch();
@@ -43,6 +43,7 @@ export const SessionAdmin = () => {
   // ComponentDidMount
   useEffect(() => {
     dispatch(getSessionInfo(sessionId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const {
@@ -64,7 +65,7 @@ export const SessionAdmin = () => {
   }));
   // bunu yukarıdaki gruba ekleyince alamadı bi türlü
   const id = useSelector((state) => state.currentSession._id);
-  console.log("sound " + sound + " " + isSoundPlaying);
+  // console.log("sound " + sound + " " + isSoundPlaying);
 
   /**
    * Burada saçma işler döndü ben de tam anlamadım özetle
@@ -88,30 +89,34 @@ export const SessionAdmin = () => {
 
   const [modal, toggleModal] = useState(false);
 
-  const handleOpenModal = () => {
-    toggleModal(true);
-  };
+  // SEANS silmeyi iptal ettik
+  // const handleOpenModal = () => {
+  //   toggleModal(true);
+  // };
+
   const handleCloseModal = () => {
-    console.log("modal closed");
+    // console.log("modal closed");
 
     toggleModal(false);
   };
 
   const deleteSessionConfirmed = () => {
-    console.log("SESSION DELETED");
+    // console.log("SESSION DELETED");
 
     dispatch(deleteSession({ _id: id }, sessionId));
   };
 
-  const [sessionIdCopyBtnText, setSessionIdCopyBtnText] = useState("Copy");
-  const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState("Copy");
+  const [sessionIdCopyBtnText, setSessionIdCopyBtnText] = useState("Kopyala");
+  const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState(
+    "Kopyala"
+  );
 
   const handleSessionIdCopyToClipboard = () => {
-    setSessionIdCopyBtnText("Copied");
+    setSessionIdCopyBtnText("Kopyalandı");
     copy(sessionId);
   };
   const handleSessionLinkCopyToClipboard = () => {
-    setSessionLinkCopyBtnText("Copied");
+    setSessionLinkCopyBtnText("Kopyalandı");
     copy(shareUrlString);
   };
 
@@ -141,10 +146,10 @@ export const SessionAdmin = () => {
 
             <div className="input-group mb-3">
               <input
-              style={{backgroundColor: "inherit", borderStyle: "none"}}
+                style={{ backgroundColor: "inherit", borderStyle: "none" }}
                 type="text"
                 className="form-control over-flow"
-                value="Seans Linkini kopyala.."
+                value={shareUrlString}
               />
               <div className="input-group-append">
                 <button
@@ -398,7 +403,8 @@ export const SessionAdmin = () => {
               <button
                 type="button"
                 className="btn btn-outline-danger ml-2 btn-sm"
-                onClick={handleOpenModal}
+                // onClick={handleOpenModal} // seans silmeyi kaldirdik
+                onClick={() => history.push("/admin")}
               >
                 <span>
                   <XSquare size={20} />{" "}

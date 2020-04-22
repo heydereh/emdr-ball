@@ -36,19 +36,19 @@ export const Admin = () => {
   };
 
   useEffect(() => {
-    console.log(
-      `session created?${hasSessionCreated} newSessionId: ${newSessionId}`
-    );
+    // console.log(
+    //   `session created?${hasSessionCreated} newSessionId: ${newSessionId}`
+    // );
     if (hasSessionCreated && newSessionId !== -1) {
-      console.log(
-        `session created?${hasSessionCreated} newSessionId: ${newSessionId}`
-      );
+      // console.log(
+      //   `session created?${hasSessionCreated} newSessionId: ${newSessionId}`
+      // );
       history.push(`/admin/${newSessionId}`);
     }
   });
 
   // Bu object array i donuyor
-  console.log(Object.entries(Cookies.get()));
+  // console.log(Object.entries(Cookies.get()));
 
   const oldSessions = Object.entries(Cookies.get());
   // her bir entry si yine array bu array in 2. elemani bize lazim olan obje
@@ -65,7 +65,7 @@ export const Admin = () => {
     }
     
   });
-  console.log(oldSessionsArrayOfObject);
+  // console.log(oldSessionsArrayOfObject);
 
   // const oldDate = new Date.prototype.constructor(
   //   Date.parse(oldSessionsArrayOfObject[0].createdAt)
@@ -90,7 +90,7 @@ export const Admin = () => {
                     Adınız
                     <span>
                       <label style={{ fontSize: "smaller" }}>
-                        <sub>* Danışanınızın ekranında görünecek isminiz</sub>
+                        <sub style={{color: "red"}}>* Danışanınızın ekranında görünecek isminiz</sub>
                       </label>
                     </span>
                   </label>
@@ -107,7 +107,7 @@ export const Admin = () => {
                     Danışan Adı
                     <span>
                       <label style={{ fontSize: "smaller" }}>
-                        <sub>* Danışanınızı seansta karşılamak için..</sub>
+                        <sub style={{color: "red"}}>* Danışanınız bu isimle karşılanacaktır..</sub>
                       </label>
                     </span>
                   </label>

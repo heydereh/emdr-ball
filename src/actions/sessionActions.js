@@ -20,10 +20,10 @@ import Cookies from 'js-cookie';
  export const createSession = (options) => {
     const newSessionId = Date.now()
     options.sessionId = newSessionId
-    console.log(options);
+    // console.log(options);
     
     return async dispatch => {
-        console.log(options);
+        // console.log(options);
         
         dispatch({
             type: SESSION_CREATE_START,

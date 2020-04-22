@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import { getSessionInfo } from "../../actions/sessionActions";
@@ -7,11 +8,11 @@ import socketIOClient from "socket.io-client";
 import drip from "./drip.mp3";
 import drop from "./drop.mp3";
 import ReactInterval from "react-interval";
-import useWindowSize from '../../helpers/useWindowSize'
+import useWindowSize from "../../helpers/useWindowSize";
 
 export const Session = (props) => {
   let match = useRouteMatch();
-  console.log(props);
+  // console.log(props);
   const socket = socketIOClient(`http://localhost:5050`);
 
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ export const Session = (props) => {
       isSoundPlaying: state.currentSession.isSoundPlaying,
     };
   });
-  console.log(ballSpeed);
+  // console.log(ballSpeed);
 
   const keyframesStyle = `
     @keyframes mymoveSession {
@@ -49,20 +50,22 @@ export const Session = (props) => {
 `;
   // Keyframes inject
   injectStyle(keyframesStyle);
+
   socket.on("disconnect", () => {
-    console.log("socket bağlantısı " + socket.connected);
+    // console.log("socket bağlantısı " + socket.connected);
   });
+
   // ComponentDidMount
   useEffect(() => {
     // console.log(socket);
     socket.on("fromServer", (data) => {
-      console.log(data);
+      // console.log(data);
       if (data.hasSessionChanged) {
-        console.log("session changed");
+        // console.log("session changed");
         dispatch(getSessionInfo(match.params.sessionId));
       }
     });
-    socket.on("welcome", (data) => console.log(data));
+    // socket.on("welcome", (data) => console.log(data));
     dispatch(getSessionInfo(match.params.sessionId));
   }, []);
 
@@ -76,7 +79,7 @@ export const Session = (props) => {
 
   const soundToPlay = new Audio(sound === "drip" ? drip : drop);
   const playSound = () => {
-    console.log("SOUND PLAYING");
+    // console.log("SOUND PLAYING");
     soundToPlay.play();
   };
 
@@ -127,7 +130,7 @@ export const Session = (props) => {
 
   const inAdminPage = (
     <div className="ml-3">
-      Hasta adı: <strong className="text-capitalize">{patient}.</strong>
+      Danışan adı: <strong className="text-capitalize">{patient}.</strong>
     </div>
   );
   const inSessionPage = (
@@ -142,41 +145,48 @@ export const Session = (props) => {
     </div>
   );
 
-    // Scroll to animation component
-    const useScroll = () => {
-      const htmlElRef = useRef(null)
-      const executeScroll = () => window.scrollTo({behavior: 'smooth', top: htmlElRef.current.offsetTop})
-    
-      return [executeScroll, htmlElRef]
-    }
-    const [ executeScroll, htmlElRef ] = useScroll();
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        executeScroll()
-      }, 1000);
-      return () => clearTimeout(timer);
-    }, [])
-    useEffect(() => {
-      return executeScroll
-    }, [props.cinemaMod])
-    // Scroll to animation component end
+  // Scroll to animation component
+  const useScroll = () => {
+    const htmlElRef = useRef(null);
+    const executeScroll = () =>
+      window.scrollTo({ behavior: "smooth", top: htmlElRef.current.offsetTop });
 
-   // window size for add container class for widescreen
-   const size = useWindowSize();
-   console.log(size);
-   
+    return [executeScroll, htmlElRef];
+  };
+  const [executeScroll, htmlElRef] = useScroll();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      executeScroll();
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+  useEffect(() => {
+    return executeScroll;
+  }, [props.cinemaMod]);
+  // Scroll to animation component end
 
+  // window size for add container class for widescreen
+  const size = useWindowSize();
+  // console.log(size);
 
   return (
-    <div  className={`${size.width > 999 ? 'container' : ''}`} style={{ height: "100vh" }}>
-      <div ref={htmlElRef} className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3">
+    <div
+      className={`${size.width > 999 ? "container" : ""}`}
+      style={{ height: "100vh" }}
+    >
+      <div
+        ref={htmlElRef}
+        className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3"
+      >
         {props.admin ? inAdminPage : inSessionPage}
       </div>
       <div>
         {!props.admin && (
           <button
             style={{ position: "relative", display: "flex" }}
-            className={`btn text-light ${props.cinemaMod ? 'color-cinemamod-btn' : 'color-navbar' } mx-auto`}
+            className={`btn text-light ${
+              props.cinemaMod ? "color-cinemamod-btn" : "color-navbar"
+            } mx-auto`}
             onClick={(e) => {
               e.preventDefault();
               props.toggleCinemaMod(!props.cinemaMod);
@@ -186,14 +196,14 @@ export const Session = (props) => {
           </button>
         )}
       </div>
-      <div  className="pt-4 pl-3" style={style.container}>
-        <div  className="mt-4" style={shape.get(`${ballShape}`)}></div>
+      <div className="pt-4 pl-3" style={style.container}>
+        <div className="mt-4" style={shape.get(`${ballShape}`)}></div>
       </div>
       <ReactInterval
         timeout={(speedArray[ballSpeed] * 1000) / 2}
         enabled={isActive && isSoundPlaying}
         callback={() => {
-          console.log((speedArray[ballSpeed] * 1000) / 2);
+          // console.log((speedArray[ballSpeed] * 1000) / 2);
           playSound();
         }}
       />
