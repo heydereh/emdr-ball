@@ -22,6 +22,8 @@ import {
   WhatsappIcon,
 } from "react-share";
 import copy from "copy-to-clipboard";
+import { SERVER_URL } from '../../actions/actionConstants'
+
 
 export const SessionAdmin = () => {
   let history = useHistory();
@@ -30,7 +32,7 @@ export const SessionAdmin = () => {
   // console.log(window.location.origin);
 
   const sessionId = match.params.sessionId;
-  const socket = socketIOClient(`http://localhost:5050`);
+  const socket = socketIOClient(`${SERVER_URL}`);
   socket.on("connect", () => {
     // console.log("Socket Bağlantısı : " + socket.connected);
   });
