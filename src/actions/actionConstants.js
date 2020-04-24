@@ -26,3 +26,4 @@ export const DELETE_SESSION_DONE = "DELETE_SESSION_DONE"
 export const DELETE_SESSION_ERROR = "DELETE_SESSION_ERROR"
 
 export const SERVER_URL = "http://localhost:5050"
+export const SERVER_URL_SOCKET = "http://localhost:5050"

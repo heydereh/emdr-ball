@@ -9,11 +9,14 @@ import drip from "./drip.mp3";
 import drop from "./drop.mp3";
 import ReactInterval from "react-interval";
 import useWindowSize from "../../helpers/useWindowSize";
+import { SERVER_URL_SOCKET } from '../../actions/actionConstants'
+
+
 
 export const Session = (props) => {
   let match = useRouteMatch();
   // console.log(props);
-  const socket = socketIOClient(`http://localhost:5050`);
+  const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
 
   const dispatch = useDispatch();
 
