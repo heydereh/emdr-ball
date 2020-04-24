@@ -5,8 +5,8 @@ import { useRouteMatch } from "react-router-dom";
 import { getSessionInfo } from "../../actions/sessionActions";
 import injectStyle from "../../helpers/incejctStyle";
 import socketIOClient from "socket.io-client";
-import drip from "./drip.mp3";
-import drop from "./drop.mp3";
+// import drip from "./drip.mp3";
+// import drop from "./drop.mp3";
 import ReactInterval from "react-interval";
 import useWindowSize from "../../helpers/useWindowSize";
 import { SERVER_URL_SOCKET } from '../../actions/actionConstants'
@@ -80,7 +80,7 @@ export const Session = (props) => {
     },
   };
 
-  const soundToPlay = new Audio(sound === "drip" ? drip : drop);
+  const soundToPlay = new Audio(sound === "drip" ? `${process.env.PUBLIC_URL}/drip.mp3` : `${process.env.PUBLIC_URL}/drop.mp3`);
   const playSound = () => {
     // console.log("SOUND PLAYING");
     soundToPlay.play();
