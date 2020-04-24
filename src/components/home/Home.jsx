@@ -10,6 +10,8 @@ import "./home.css";
 const Home = () => {
   const history = useHistory();
   // const sessionId = "1584986021338";
+
+  const pushTo = (someWhere) => history.push(someWhere)
   const dispatch = useDispatch();
 
   const [sessionId, setsessionId] = useState("");
@@ -33,12 +35,12 @@ const Home = () => {
 
   useEffect(() => {
     if (getSessionLoaded) {
-      history.push(`/${loadedSessionId}`);
+      pushTo(`/${loadedSessionId}`);
     }
     if (getSessionError) {
         setErrorString(getSessionError.response.data.error)
     }
-  }, []); // burada eslint hata veriyodu kaldirttim
+  }); // burada eslint hata veriyodu kaldirttim
 
   const handleSubmit = (e) => {
     dispatch(getSessionInfo(sessionId));
