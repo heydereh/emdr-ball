@@ -10,6 +10,8 @@ import socketIOClient from "socket.io-client";
 import ReactInterval from "react-interval";
 import useWindowSize from "../../helpers/useWindowSize";
 import { SERVER_URL_SOCKET } from '../../actions/actionConstants'
+import { Music, Pause, Play } from "react-feather";
+import { useState } from "react";
 
 
 
@@ -85,6 +87,25 @@ export const Session = (props) => {
     // console.log("SOUND PLAYING");
     soundToPlay.play();
   };
+  const pauseSound = () => {
+    // console.log("SOUND PLAYING");
+    soundToPlay.pause();
+  };
+
+  const [play, setPlay] = useState(false)
+
+  const handleSound = () => {
+    setPlay(!play)
+  }
+
+  useEffect(() => {
+    if (play && isSoundPlaying) {
+     playSound()
+    }
+    if (!play || !isSoundPlaying) {
+      pauseSound()
+    }
+  }, [play, isSoundPlaying])
 
   const shape = new Map();
   const marginTopp = "";
@@ -185,7 +206,7 @@ export const Session = (props) => {
       </div>
       <div>
         {!props.admin && (
-          <button
+          <div className="d-flex" ><button
             style={{ position: "relative", display: "flex" }}
             className={`btn text-light ${
               props.cinemaMod ? "color-cinemamod-btn" : "color-navbar"
@@ -197,6 +218,23 @@ export const Session = (props) => {
           >
             {`Turn Focus Mod ${props.cinemaMod ? "Off" : "On"}`}
           </button>
+          <button
+          type="button"
+          className="btn btn-outline-info btn-sm"
+          onClick={handleSound}
+        >
+          <span>
+            <Music />
+          </span>
+          <span>
+            {isSoundPlaying ? (
+              <Pause size={20} />
+            ) : (
+              <Play size={20} />
+            )}
+          </span>{" "}
+          {isSoundPlaying && play ? "On" : "Off"}
+        </button></div>
         )}
       </div>
       <div className="pt-4 pl-3" style={style.container}>
@@ -204,7 +242,7 @@ export const Session = (props) => {
       </div>
       <ReactInterval
         timeout={(speedArray[ballSpeed] * 1000) / 2}
-        enabled={isActive && isSoundPlaying}
+        enabled={isActive && isSoundPlaying && play}
         callback={() => {
           // console.log((speedArray[ballSpeed] * 1000) / 2);
           playSound();
