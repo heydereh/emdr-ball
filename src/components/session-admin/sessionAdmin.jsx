@@ -368,7 +368,7 @@ export const SessionAdmin = () => {
                         <Play size={20} />
                       )}
                     </span>{" "}
-                    {isSoundPlaying ? "Off" : "On"}
+                    {isSoundPlaying ? "On" : "Off"}
                   </button>
                 </div>
               </div>
