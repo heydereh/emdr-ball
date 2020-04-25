@@ -66,7 +66,7 @@ export const Session = (props) => {
     socket.on("fromServer", (data) => {
       // console.log(data);
       if (data.hasSessionChanged) {
-        // console.log("session changed");
+        console.log("session changed");
         dispatch(getSessionInfo(match.params.sessionId));
       }
     });
