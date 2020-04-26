@@ -12,6 +12,7 @@ import useWindowSize from "../../helpers/useWindowSize";
 import { SERVER_URL_SOCKET } from '../../actions/actionConstants'
 import { Music, Pause, Play } from "react-feather";
 import { useState } from "react";
+const eventEmitter = require('events');
 
 
 
@@ -56,23 +57,29 @@ export const Session = (props) => {
   // Keyframes inject
   injectStyle(keyframesStyle);
 
-  socket.on("disconnect", () => {
-    // console.log("socket bağlantısı " + socket.connected);
-  });
+  // socket.on("disconnect", () => {
+  //   // console.log("socket bağlantısı " + socket.connected);
+  // });
 
   // ComponentDidMount
   useEffect(() => {
     // console.log(socket);
+    if (socket.hasListeners("fromServer")) {
+      console.log("HAS LISTENER");
+      
+    }
     socket.on("fromServer", (data) => {
       // console.log(data);
       if (data.hasSessionChanged) {
         console.log("session changed");
         dispatch(getSessionInfo(match.params.sessionId));
+        // socket.removeListener("fromServer");
       }
     });
-    // socket.on("welcome", (data) => console.log(data));
+    
     dispatch(getSessionInfo(match.params.sessionId));
   }, []);
+  
 
   const speedArray = [0, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.8, 0.5];
   const style = {
