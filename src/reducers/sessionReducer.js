@@ -8,6 +8,9 @@ import {
   DELETE_SESSION_ERROR,
   DELETE_SESSION_START,
   DELETE_SESSION_DONE,
+  UPDATE_SESSION_WITH_SOCKET_START,
+  UPDATE_SESSION_WITH_SOCKET_DONE,
+  UPDATE_SESSION_WITH_SOCKET_ERROR,
 } from "../actions/actionConstants";
 
 const initialState = {
@@ -26,6 +29,7 @@ const initialState = {
   getSessionError: null,
   getSessionLoaded: false,
   hasBallStarted: false,
+  isSoundPlaying: false,
   sessionDeleteLoading: false,
   sessionDeleteLoaded: false,
   sessionDeleteError: null,
@@ -54,6 +58,9 @@ const sessionReducer = (state = initialState, action) => {
         sessionDeleteLoading: true,
         sessionDeleteLoaded: false,
         sessionDeleteError: null,
+        updating: false,
+        updated: true,
+        updateError: null,
       };
     case SESSION_CREATE_DONE:
       return {
@@ -132,6 +139,26 @@ const sessionReducer = (state = initialState, action) => {
         sessionDeleteLoading: false,
         sessionDeleteLoaded: false,
         sessionDeleteError: action.payload,
+      };
+      case UPDATE_SESSION_WITH_SOCKET_START:
+      return {
+        ...state,
+        updating: true
+      };
+      case UPDATE_SESSION_WITH_SOCKET_DONE:
+      return {
+        ...state,
+        updating: false,
+        updated: true,
+        updateError: null,
+        ...action.payload,
+      };
+      case UPDATE_SESSION_WITH_SOCKET_ERROR:
+      return {
+        ...state,
+        updating: false,
+        updated: false,
+        updateError: action.payload,
       };
     default:
       return state;
