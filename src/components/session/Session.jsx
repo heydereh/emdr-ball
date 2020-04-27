@@ -2,19 +2,20 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
-import { getSessionInfo } from "../../actions/sessionActions";
+import {
+  getSessionInfo,
+  updateSessionWithSocket,
+} from "../../actions/sessionActions";
 import injectStyle from "../../helpers/incejctStyle";
 import socketIOClient from "socket.io-client";
 // import drip from "./drip.mp3";
 // import drop from "./drop.mp3";
 import ReactInterval from "react-interval";
 import useWindowSize from "../../helpers/useWindowSize";
-import { SERVER_URL_SOCKET } from '../../actions/actionConstants'
+import { SERVER_URL_SOCKET } from "../../actions/actionConstants";
 import { Music, Pause, Play } from "react-feather";
 import { useState } from "react";
-const eventEmitter = require('events');
-
-
+// const eventEmitter = require("events");
 
 export const Session = (props) => {
   let match = useRouteMatch();
@@ -66,20 +67,22 @@ export const Session = (props) => {
     // console.log(socket);
     if (socket.hasListeners("fromServer")) {
       console.log("HAS LISTENER");
-      
     }
     socket.on("fromServer", (data) => {
       // console.log(data);
-      if (data.hasSessionChanged) {
-        console.log("session changed");
-        dispatch(getSessionInfo(match.params.sessionId));
+      if (data) {
+        // console.log("session changed");
+        dispatch(updateSessionWithSocket(data));
+        // dispatch(getSessionInfo(match.params.sessionId));
         // socket.removeListener("fromServer");
       }
     });
-    
     dispatch(getSessionInfo(match.params.sessionId));
+
+    return () => {
+      socket.close();
+    };
   }, []);
-  
 
   const speedArray = [0, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.8, 0.5];
   const style = {
@@ -89,7 +92,11 @@ export const Session = (props) => {
     },
   };
 
-  const soundToPlay = new Audio(sound === "drip" ? `${process.env.PUBLIC_URL}/drip.mp3` : `${process.env.PUBLIC_URL}/drop.mp3`);
+  const soundToPlay = new Audio(
+    sound === "drip"
+      ? `${process.env.PUBLIC_URL}/drip.mp3`
+      : `${process.env.PUBLIC_URL}/drop.mp3`
+  );
   const playSound = () => {
     // console.log("SOUND PLAYING");
     soundToPlay.play();
@@ -99,20 +106,24 @@ export const Session = (props) => {
     soundToPlay.pause();
   };
 
-  const [play, setPlay] = useState(false)
+  const [play, setPlay] = useState(false);
+  // console.log("PLAY " + play);
+  // console.log("IS SOUND PLAYIN " + isSoundPlaying);
 
   const handleSound = () => {
-    setPlay(!play)
-  }
+    setPlay(!play);
+  };
 
   useEffect(() => {
+    // console.log("PLAY IN EFFECT : " + play);
+    // console.log("IS SOUND PLAYING IN EFFECT : " + isSoundPlaying);
     if (play && isSoundPlaying) {
-     playSound()
+      playSound();
     }
     if (!play || !isSoundPlaying) {
-      pauseSound()
+      pauseSound();
     }
-  }, [play, isSoundPlaying])
+  }, [play, isSoundPlaying]);
 
   const shape = new Map();
   const marginTopp = "";
@@ -213,35 +224,33 @@ export const Session = (props) => {
       </div>
       <div>
         {!props.admin && (
-          <div className="d-flex" ><button
-            style={{ position: "relative", display: "flex" }}
-            className={`btn text-light ${
-              props.cinemaMod ? "color-cinemamod-btn" : "color-navbar"
-            } mx-auto`}
-            onClick={(e) => {
-              e.preventDefault();
-              props.toggleCinemaMod(!props.cinemaMod);
-            }}
-          >
-            {`Turn Focus Mod ${props.cinemaMod ? "Off" : "On"}`}
-          </button>
-          <button
-          type="button"
-          className="btn btn-outline-info btn-sm"
-          onClick={handleSound}
-        >
-          <span>
-            <Music />
-          </span>
-          <span>
-            {isSoundPlaying ? (
-              <Pause size={20} />
-            ) : (
-              <Play size={20} />
-            )}
-          </span>{" "}
-          {isSoundPlaying && play ? "On" : "Off"}
-        </button></div>
+          <div className="d-flex">
+            <button
+              style={{ position: "relative", display: "flex" }}
+              className={`btn text-light ${
+                props.cinemaMod ? "color-cinemamod-btn" : "color-navbar"
+              } mx-auto`}
+              onClick={(e) => {
+                e.preventDefault();
+                props.toggleCinemaMod(!props.cinemaMod);
+              }}
+            >
+              {`Turn Focus Mod ${props.cinemaMod ? "Off" : "On"}`}
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-info btn-sm"
+              onClick={handleSound}
+            >
+              <span>
+                <Music />
+              </span>
+              <span>
+                {isSoundPlaying ? <Pause size={20} /> : <Play size={20} />}
+              </span>{" "}
+              {isSoundPlaying && play ? "On" : "Off"}
+            </button>
+          </div>
         )}
       </div>
       <div className="pt-4 pl-3" style={style.container}>
