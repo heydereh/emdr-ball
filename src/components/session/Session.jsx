@@ -33,6 +33,7 @@ export const Session = (props) => {
     isActive,
     isSoundPlaying,
     sound,
+    _id,
   } = useSelector((state) => {
     // console.log(state);
     return {
@@ -42,6 +43,7 @@ export const Session = (props) => {
       direction: state.currentSession.direction,
       ballSpeed: state.currentSession.ballSpeed,
       isActive: state.currentSession.isActive,
+      _id: state.currentSession._id,
       sound: state.currentSession.sound,
       isSoundPlaying: state.currentSession.isSoundPlaying,
     };
@@ -65,24 +67,20 @@ export const Session = (props) => {
   // ComponentDidMount
   useEffect(() => {
     // console.log(socket);
-    if (socket.hasListeners("fromServer")) {
-      console.log("HAS LISTENER");
+    if (_id) {
+      socket.on(_id, (data) => {
+        if (data) {
+          dispatch(updateSessionWithSocket(data));
+        }
+      });
     }
-    socket.on("fromServer", (data) => {
-      // console.log(data);
-      if (data) {
-        // console.log("session changed");
-        dispatch(updateSessionWithSocket(data));
-        // dispatch(getSessionInfo(match.params.sessionId));
-        // socket.removeListener("fromServer");
-      }
-    });
+
     dispatch(getSessionInfo(match.params.sessionId));
 
     return () => {
       socket.close();
     };
-  }, []);
+  }, [_id]);
 
   const speedArray = [0, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.8, 0.5];
   const style = {
