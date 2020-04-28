@@ -95,8 +95,11 @@ export const Session = (props) => {
       ? `${process.env.PUBLIC_URL}/drip.mp3`
       : `${process.env.PUBLIC_URL}/drop.mp3`
   );
+  
+
   const playSound = () => {
     // console.log("SOUND PLAYING");
+    // soundToPlay.autoplay(true);
     soundToPlay.play();
   };
   const pauseSound = () => {
