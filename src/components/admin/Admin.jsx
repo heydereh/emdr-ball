@@ -80,7 +80,7 @@ export const Admin = () => {
         <meta name="keywords" content="emdr,terapi,top,göz,seans" />
       </Helmet>
       <div className="container-lg container-md container-sm container-xl">
-        <div className="row mh-100vh">
+        <div className="row mh-100">
           <div
             className="col-10 col-sm-8 col-md-6 col-lg-6 offset-1 offset-sm-2 offset-md-3 offset-lg-0 align-self-center d-lg-flex align-items-lg-center align-self-lg-stretch bg-white p-5 rounded rounded-lg-0 my-5 my-lg-0"
             id="login-block"
@@ -184,7 +184,7 @@ export const Admin = () => {
               backgroundPosition: "center center",
             }}
           >
-            <p className="ml-auto small text-dark mb-2">
+            {/* <p className="ml-auto small text-dark mb-2">
               <em>Photo by&nbsp;</em>
               <a
                 className="text-dark"
@@ -195,7 +195,7 @@ export const Admin = () => {
                 <em>Aldain Austria</em>
               </a>
               <br />
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

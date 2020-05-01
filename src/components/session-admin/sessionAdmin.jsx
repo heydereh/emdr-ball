@@ -7,7 +7,6 @@ import {
   getSessionInfo,
   deleteSession,
 } from "../../actions/sessionActions";
-// import socketIOClient from "socket.io-client";
 import { Session } from "../session/Session";
 import { DeleteModal } from "../Modals/DeleteModal";
 import { colorButton } from "../../helpers/colors";
@@ -23,24 +22,14 @@ import {
 } from "react-share";
 import copy from "copy-to-clipboard";
 import { Helmet } from "react-helmet";
-// import { SERVER_URL_SOCKET } from '../../actions/actionConstants'
 
 
 
 export const SessionAdmin = () => {
   let history = useHistory();
   let match = useRouteMatch();
-  // console.log(window.location.origin);
 
   const sessionId = match.params.sessionId;
-  // const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
-  // socket.on("connect", () => {
-  //   // console.log("Socket Bağlantısı : " + socket.connected);
-  // });
-  // // yukarıdaki ve bu calisiyor
-  // socket.on("disconnect", () => {
-  //   // console.log("Socket Bağlantısı : " + socket.connected);
-  // });
 
   const dispatch = useDispatch();
 
@@ -91,43 +80,21 @@ export const SessionAdmin = () => {
     }
   });
 
-  const [modal, toggleModal] = useState(false);
 
-  // SEANS silmeyi iptal ettik
-  // const handleOpenModal = () => {
-  //   toggleModal(true);
-  // };
-
-  const handleCloseModal = () => {
-    // console.log("modal closed");
-
-    toggleModal(false);
-  };
-
-  const deleteSessionConfirmed = () => {
-    // console.log("SESSION DELETED");
-
-    dispatch(deleteSession({ _id: id }, sessionId));
-  };
-
-  const [sessionIdCopyBtnText, setSessionIdCopyBtnText] = useState("Kopyala");
   const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState(
     "Kopyala"
   );
 
-  const handleSessionIdCopyToClipboard = () => {
-    setSessionIdCopyBtnText("Kopyalandı");
-    copy(sessionId);
-  };
   const handleSessionLinkCopyToClipboard = () => {
     setSessionLinkCopyBtnText("Kopyalandı");
     copy(shareUrlString);
   };
 
+  // paylaşım için full url path
   const shareUrlString = `${window.location.origin}/${sessionId}`;
 
   return (
-    <div className="color-background">
+    <div >
       <Helmet>
         <title>EMDRTR Göz Terapi Seans Konsolu</title>
         <meta name="description" content="Emdr Göz Terapisi seans konsolu ile kolayca seansınızı kontrol edebilirsiniz." />
@@ -137,25 +104,13 @@ export const SessionAdmin = () => {
         className="row"
         style={{ height: "110vh", marginRight: "0px", marginLeft: "0px" }}
       >
-        <div className="col-4 border border-dark">
-          <div className="ml-2">
-            <h6 className="mt-2">SEANS NO</h6>
-            <div className="input-group mb-3">
-              <input type="text" className="form-control" value={sessionId} />
-              <div className="input-group-append">
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={handleSessionIdCopyToClipboard}
-                >
-                  {sessionIdCopyBtnText}
-                </button>
-              </div>
-            </div>
+        <div className="col-4 border border-dark" style={{ maxHeight: "100vh", overflowY: "scroll"}}>
+          <div className="ml-2 ">
+            <h6 className="mt-3">SEANS PAYLAŞIM LİNKİ</h6>
 
             <div className="input-group mb-3">
               <input
-                style={{ backgroundColor: "inherit", borderStyle: "none" }}
+                style={{ backgroundColor: "inherit", borderStyle: "none", paddingLeft: "0px" }}
                 type="text"
                 className="form-control over-flow"
                 value={shareUrlString}
@@ -185,9 +140,6 @@ export const SessionAdmin = () => {
             <WhatsappShareButton url={shareUrlString}>
               <WhatsappIcon size={32} />
             </WhatsappShareButton>
-            <LinkedinShareButton url={shareUrlString}>
-              <LinkedinIcon size={32} />
-            </LinkedinShareButton>
           </div>
           <div className="ml-2 mt-3">
             <div className="mt-2">{`SET SPEED [${speedOfBall}]`}</div>
@@ -195,7 +147,7 @@ export const SessionAdmin = () => {
               <input
                 style={{}}
                 type="range"
-                min="0"
+                min="1"
                 max="9"
                 value={speedOfBall}
                 className="slider w-100"
@@ -214,7 +166,7 @@ export const SessionAdmin = () => {
                   )
                 }
               >
-                Apply Speed
+                Hızı Ayarla
               </button>
               <div>
                 <span>
@@ -227,7 +179,7 @@ export const SessionAdmin = () => {
                 </span>
               </div>
             </div>
-            <div className="mt-2">SET SHAPE</div>
+            <div className="mt-2">ŞEKLİ SEÇ</div>
             <div
               className="mt-2 ml-2"
               id="shapeRadioGroup"
@@ -252,7 +204,7 @@ export const SessionAdmin = () => {
                       defaultChecked={ballShape === "square"}
                     />
                     <label className="form-check-label" htmlFor="squareRadio">
-                      Square
+                      Kare
                     </label>
                   </div>
                 </div>
@@ -267,7 +219,7 @@ export const SessionAdmin = () => {
                       defaultChecked={ballShape === "circle"}
                     />
                     <label className="form-check-label" htmlFor="circleRadio">
-                      Circle
+                      Daire
                     </label>
                   </div>
                 </div>
@@ -282,13 +234,13 @@ export const SessionAdmin = () => {
                       defaultChecked={ballShape === "diamond"}
                     />
                     <label className="form-check-label" htmlFor="diamondRadio">
-                      Diamond
+                      Baklava
                     </label>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="mt-2">SET SOUND</div>
+            <div className="mt-2">SESİ AYARLA</div>
             <div
               className="mt-2 ml-2 mr-3"
               id="soundRadioGroup"
@@ -298,10 +250,10 @@ export const SessionAdmin = () => {
                 )
               }
             >
-              <div className="row">
+              <div className="row d-flex align-items-center">
                 <div className="col-sm">
                   <div className="form-check">
-                    {/* default check calismadi mecbut boyle uzun yoldan yaptim */}
+                    {/* default check calismadi mecbur boyle uzun yoldan yaptim */}
                     {sound === "drip" ? (
                       <input
                         className="form-check-input"
@@ -364,26 +316,16 @@ export const SessionAdmin = () => {
                       )
                     }
                   >
-                    <span>
-                      <Music />
-                    </span>
-                    <span>
-                      {isSoundPlaying ? (
-                        <Pause size={20} />
-                      ) : (
-                        <Play size={20} />
-                      )}
-                    </span>{" "}
-                    {isSoundPlaying ? "On" : "Off"}
+                    {`Ses ${isSoundPlaying ? "Açık" : "Kapalı"}`}
                   </button>
                 </div>
               </div>
             </div>{" "}
             {/** sound radio group end */}
-            <div className="mt-3 mb-2 mr-2 btn-group">
+            <div className="row mt-3 mb-2 mr-2 btn-group">
               <button
                 type="button"
-                className="btn btn-outline-info btn-sm"
+                className="btn btn-outline-info col-sm"
                 onClick={() =>
                   dispatch(
                     updateSession({ isActive: false, _id: id }, sessionId)
@@ -393,11 +335,11 @@ export const SessionAdmin = () => {
                 <span>
                   <Pause size={20} />
                 </span>{" "}
-                Pause
+                Duraklat
               </button>
               <button
                 type="button"
-                className="btn btn-outline-info ml-2 btn-sm"
+                className="btn btn-outline-info btn-sm col-sm mb-2"
                 onClick={() =>
                   dispatch(
                     updateSession({ isActive: true, _id: id }, sessionId)
@@ -407,33 +349,16 @@ export const SessionAdmin = () => {
                 <span>
                   <Play size={20} />{" "}
                 </span>
-                Resume
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline-danger ml-2 btn-sm"
-                // onClick={handleOpenModal} // seans silmeyi kaldirdik
-                onClick={() => history.push("/admin")}
-              >
-                <span>
-                  <XSquare size={20} />{" "}
-                </span>
-                Çıkış
+                Başlat
               </button>
             </div>
           </div>
         </div>
         {/* SAĞ TARAF */}
-        <div className="col-8 border border-dark">
+        <div className="col-8 border border-dark" style={{ maxHeight: "100vh", overflowY: "unset"}}>
           <Session admin={true} />
         </div>
       </div>
-      <DeleteModal
-        show={modal}
-        title={"Seansı"}
-        handleCloseModal={handleCloseModal}
-        deleteComfirmed={deleteSessionConfirmed}
-      />
     </div>
   );
 };

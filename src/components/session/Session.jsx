@@ -96,7 +96,6 @@ export const Session = (props) => {
       ? `${process.env.PUBLIC_URL}/drip.mp3`
       : `${process.env.PUBLIC_URL}/drop.mp3`
   );
-  
 
   const playSound = () => {
     // console.log("SOUND PLAYING");
@@ -108,6 +107,7 @@ export const Session = (props) => {
     soundToPlay.pause();
   };
 
+  // TODO Session cookie ye koy
   const [play, setPlay] = useState(false);
   // console.log("PLAY " + play);
   // console.log("IS SOUND PLAYIN " + isSoundPlaying);
@@ -218,11 +218,16 @@ export const Session = (props) => {
       className={`${size.width > 999 ? "container" : ""}`}
       style={{ height: "100vh" }}
     >
-      {!props.admin && <Helmet>
-        <title>EMDRTR Göz Terapi Seansınıza hoş geldiniz</title>
-        <meta name="description" content="Emdr Göz Terapisi terapistiniz ile online emdr seansı yapabilmenize olanak sağlar " />
-        <meta name="keywords" content="emdr,terapi,top,göz,seans" />
-      </Helmet>}
+      {!props.admin && (
+        <Helmet>
+          <title>EMDRTR Göz Terapi Seansınıza hoş geldiniz</title>
+          <meta
+            name="description"
+            content="Emdr Göz Terapisi terapistiniz ile online emdr seansı yapabilmenize olanak sağlar "
+          />
+          <meta name="keywords" content="emdr,terapi,top,göz,seans" />
+        </Helmet>
+      )}
       <div
         ref={htmlElRef}
         className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3"
@@ -260,12 +265,12 @@ export const Session = (props) => {
           </div>
         )}
       </div>
-      <div className="pt-4 pl-3" style={style.container}>
+      <div className="pt-4 pl-1 pr-4" style={style.container}>
         <div className="mt-4" style={shape.get(`${ballShape}`)}></div>
       </div>
       <ReactInterval
         timeout={(speedArray[ballSpeed] * 1000) / 2}
-        enabled={isActive && isSoundPlaying && play}
+        enabled={!props.admin ? (isActive && isSoundPlaying && play) : (isActive && isSoundPlaying)}
         callback={() => {
           // console.log((speedArray[ballSpeed] * 1000) / 2);
           playSound();
