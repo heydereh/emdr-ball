@@ -62,7 +62,7 @@ const Home = () => {
             <div className="row">
               <div className="col-xl-9 mx-auto">
                 <h6 style={{ fontSize: "2rem" }} className="mb-5">
-                  EMDR Eye Theraphy'e Hoş Geldiniz...
+                  EMDRTR'ye Hoş Geldiniz...
                 </h6>
               </div>
               <div className="col-md-10 col-lg-8 col-xl-7 mx-auto">
@@ -138,7 +138,7 @@ const Home = () => {
                   </div>
                   <h3>Ücretsiz</h3>
                   <p className="lead mb-0">
-                    EMDr Eye Theraphy kullanımı tamamen ücresizdir.
+                    EMDRTR'de seans oluşturmak tamamen ücresizdir.
                   </p>
                 </div>
               </div>

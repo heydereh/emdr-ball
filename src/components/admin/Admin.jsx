@@ -6,6 +6,7 @@ import EyePhoto from "./eye-macro.jpg";
 import Cookies from "js-cookie";
 import { colorNavbar } from "../../helpers/colors";
 import { hours } from "../../helpers/timeConversions";
+import { Helmet } from "react-helmet";
 
 import "./admin.css";
 
@@ -73,6 +74,11 @@ export const Admin = () => {
 
   return (
     <div /* style={{height: "100%"}} */>
+      <Helmet>
+        <title>EMDRTR Göz Terapi Seans Oluştur</title>
+        <meta name="description" content="Emdr Göz Terapisi ücretsiz olarak uzaktan göz terapi seansları oluşturup danışanlarınızda seans yapabileceğiniz bir platform sunar." />
+        <meta name="keywords" content="emdr,terapi,top,göz,seans" />
+      </Helmet>
       <div className="container-lg container-md container-sm container-xl">
         <div className="row mh-100vh">
           <div

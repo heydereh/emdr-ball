@@ -18,6 +18,8 @@ const App = () => {
   // const isAdmin = location.pathname.includes('admin')
   return (
     <Router history={history}>
+      <div className="App">
+    </div>
       <div
         className={`${cinemaMod ? "opacity-1" : "color-background"}`}
         style={{}}

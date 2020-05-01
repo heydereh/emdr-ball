@@ -12,7 +12,7 @@ const Appbar = (props) => {
     return (
         <div style={{}} className="appbar-for-admin"  >
             <nav className={`container navbar navbar-expand-lg navbar-light appbar-bg ${(cinemaMod && (!isAdmin)) ? 'color-navbar-opacity' : 'color-navbar'}`} style={{minHeight: "80px"}}>
-                <a className="navbar-brand" href="/">EMDr Eye Theraphy</a>
+                <a className="navbar-brand" href="/">EMDRTR</a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon" />
                 </button>

@@ -15,6 +15,7 @@ import useWindowSize from "../../helpers/useWindowSize";
 import { SERVER_URL_SOCKET } from "../../actions/actionConstants";
 import { Music, Pause, Play } from "react-feather";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 // const eventEmitter = require("events");
 
 export const Session = (props) => {
@@ -217,6 +218,11 @@ export const Session = (props) => {
       className={`${size.width > 999 ? "container" : ""}`}
       style={{ height: "100vh" }}
     >
+      {!props.admin && <Helmet>
+        <title>EMDRTR Göz Terapi Seansınıza hoş geldiniz</title>
+        <meta name="description" content="Emdr Göz Terapisi terapistiniz ile online emdr seansı yapabilmenize olanak sağlar " />
+        <meta name="keywords" content="emdr,terapi,top,göz,seans" />
+      </Helmet>}
       <div
         ref={htmlElRef}
         className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3"

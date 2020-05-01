@@ -22,6 +22,7 @@ import {
   WhatsappIcon,
 } from "react-share";
 import copy from "copy-to-clipboard";
+import { Helmet } from "react-helmet";
 // import { SERVER_URL_SOCKET } from '../../actions/actionConstants'
 
 
@@ -127,6 +128,11 @@ export const SessionAdmin = () => {
 
   return (
     <div className="color-background">
+      <Helmet>
+        <title>EMDRTR Göz Terapi Seans Konsolu</title>
+        <meta name="description" content="Emdr Göz Terapisi seans konsolu ile kolayca seansınızı kontrol edebilirsiniz." />
+        <meta name="keywords" content="emdr,terapi,top,göz,seans" />
+      </Helmet>
       <div
         className="row"
         style={{ height: "110vh", marginRight: "0px", marginLeft: "0px" }}
