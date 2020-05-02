@@ -21,13 +21,13 @@ const App = () => {
       <div className="App">
     </div>
       <div
-        className={`${cinemaMod ? "opacity-1" : ""}`}
+        className={`${cinemaMod ? "opacity-1" : "color-background"}`}
         style={{}}
       >
         <div>
           <Appbar cinemaMod={cinemaMod} toggleCinemaMod={setCinemaMod} />
         </div>
-        <div id="main-container" className="color-background">
+        <div id="main-container" >
           <Switch>
             <Route path="/" exact component={() => <Redirect to={"/home"} />} />
             <Route path="/home" exact component={() => <Home />} />

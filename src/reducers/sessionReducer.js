@@ -5,6 +5,9 @@ import {
   GET_SESSION_INFO_START,
   GET_SESSION_INFO_DONE,
   GET_SESSION_INFO_ERROR,
+  GET_SESSION_INFO_NOSOUND_START,
+  GET_SESSION_INFO_NOSOUND_DONE,
+  GET_SESSION_INFO_NOSOUND_ERROR,
   DELETE_SESSION_ERROR,
   DELETE_SESSION_START,
   DELETE_SESSION_DONE,
@@ -113,6 +116,38 @@ const sessionReducer = (state = initialState, action) => {
         sound: action.payload.sound,
       };
     case GET_SESSION_INFO_ERROR:
+      return {
+        ...state,
+        getSessionLoading: false,
+        getSessionError: action.payload,
+        getSessionLoaded: false,
+      };
+      case GET_SESSION_INFO_NOSOUND_START:
+      return {
+        ...state,
+        getSessionLoading: false,
+        getSessionError: null,
+        getSessionLoaded: false,
+      };
+    case GET_SESSION_INFO_NOSOUND_DONE:
+      return {
+        ...state,
+        _id: action.payload._id,
+        getSessionLoading: false,
+        getSessionLoaded: true,
+        sessionId: action.payload.sessionId,
+        createdAt: action.payload.createdAt,
+        patient: action.payload.patient,
+        ballShape: action.payload.ballShape,
+        direction: action.payload.direction,
+        ballSpeed: action.payload.ballSpeed,
+        isActive: action.payload.isActive,
+        hasBallStarted: action.payload.hasBallStarted,
+        drName: action.payload.drName,
+        isSoundPlaying: action.payload.isSoundPlaying,
+        sound: 'off',
+      };
+    case GET_SESSION_INFO_NOSOUND_ERROR:
       return {
         ...state,
         getSessionLoading: false,

@@ -1,29 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouteMatch, useHistory } from "react-router-dom";
-import { Pause, Play, XSquare, Music } from "react-feather";
-import {
-  updateSession,
-  getSessionInfo,
-  deleteSession,
-} from "../../actions/sessionActions";
+import { Pause, Play } from "react-feather";
+import { updateSession, getSessionInfoWithNoSound } from "../../actions/sessionActions";
 import { Session } from "../session/Session";
-import { DeleteModal } from "../Modals/DeleteModal";
 import { colorButton } from "../../helpers/colors";
 import {
   EmailShareButton,
   FacebookShareButton,
-  LinkedinShareButton,
   WhatsappShareButton,
   EmailIcon,
   FacebookIcon,
-  LinkedinIcon,
   WhatsappIcon,
 } from "react-share";
 import copy from "copy-to-clipboard";
 import { Helmet } from "react-helmet";
-
-
 
 export const SessionAdmin = () => {
   let history = useHistory();
@@ -35,25 +26,14 @@ export const SessionAdmin = () => {
 
   // ComponentDidMount
   useEffect(() => {
-    dispatch(getSessionInfo(sessionId));
+    dispatch(getSessionInfoWithNoSound(sessionId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const {
-    ballShape,
-    ballSpeed,
-    sessionDeleteLoaded,
-    sound,
-    isSoundPlaying,
-  } = useSelector((state) => ({
-    id: state.currentSession._id,
-    patient: state.currentSession.patient,
+  const { ballShape, ballSpeed } = useSelector((state) => ({
     ballShape: state.currentSession.ballShape,
     direction: state.currentSession.direction,
     ballSpeed: state.currentSession.ballSpeed,
-    hasBallStarted: state.currentSession.hasBallStarted,
-    sessionDeleteLoaded: state.currentSession.sessionDeleteLoaded,
-    sound: state.currentSession.sound,
     isSoundPlaying: state.currentSession.isSoundPlaying,
   }));
   // bunu yukarıdaki gruba ekleyince alamadı bi türlü
@@ -67,19 +47,21 @@ export const SessionAdmin = () => {
    * shouldcomponentupdate alternatifi hook ile yeni render da state güncelleniyor
    */
   const [speedOfBall, setSpeed] = useState(ballSpeed);
-
+  // bunu page kapanınca tekrar update edeceğim için ayrı aldım
+  const sound = useSelector((state) => state.currentSession.sound);
   // ShouldComponentMount
   useEffect(() => {
     setSpeed(ballSpeed);
   }, [ballSpeed]);
 
-  // ComponentDidUpdate
-  useEffect(() => {
-    if (sessionDeleteLoaded) {
-      history.push("/admin");
-    }
-  });
 
+  const handleSound = (e) => {
+    console.log(e.target.value);
+
+    dispatch(
+      updateSession({ sound: e.target.value, _id: id }, sessionId)
+    )
+  };
 
   const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState(
     "Kopyala"
@@ -93,24 +75,35 @@ export const SessionAdmin = () => {
   // paylaşım için full url path
   const shareUrlString = `${window.location.origin}/${sessionId}`;
 
+
   return (
-    <div >
+    <div>
       <Helmet>
         <title>EMDRTR Göz Terapi Seans Konsolu</title>
-        <meta name="description" content="Emdr Göz Terapisi seans konsolu ile kolayca seansınızı kontrol edebilirsiniz." />
+        <meta
+          name="description"
+          content="Emdr Göz Terapisi seans konsolu ile kolayca seansınızı kontrol edebilirsiniz."
+        />
         <meta name="keywords" content="emdr,terapi,top,göz,seans" />
       </Helmet>
       <div
         className="row"
         style={{ height: "110vh", marginRight: "0px", marginLeft: "0px" }}
       >
-        <div className="col-4 border border-dark" style={{ maxHeight: "100vh", overflowY: "scroll"}}>
+        <div
+          className="col-4 border border-dark"
+          style={{ maxHeight: "100vh", overflowY: "scroll" }}
+        >
           <div className="ml-2 ">
             <h6 className="mt-3">SEANS PAYLAŞIM LİNKİ</h6>
 
             <div className="input-group mb-3">
               <input
-                style={{ backgroundColor: "inherit", borderStyle: "none", paddingLeft: "0px" }}
+                style={{
+                  backgroundColor: "inherit",
+                  borderStyle: "none",
+                  paddingLeft: "0px",
+                }}
                 type="text"
                 className="form-control over-flow"
                 value={shareUrlString}
@@ -240,15 +233,12 @@ export const SessionAdmin = () => {
                 </div>
               </div>
             </div>
+            {/* soundRadioGroup */}
             <div className="mt-2">SESİ AYARLA</div>
             <div
               className="mt-2 ml-2 mr-3"
               id="soundRadioGroup"
-              onChange={(e) =>
-                dispatch(
-                  updateSession({ sound: e.target.value, _id: id }, sessionId)
-                )
-              }
+              onChange={handleSound}
             >
               <div className="row d-flex align-items-center">
                 <div className="col-sm">
@@ -304,20 +294,30 @@ export const SessionAdmin = () => {
                   </div>
                 </div>
                 <div className="col-sm">
-                  <button
-                    type="button"
-                    className="btn btn-outline-info btn-sm"
-                    onClick={() =>
-                      dispatch(
-                        updateSession(
-                          { isSoundPlaying: !isSoundPlaying, _id: id },
-                          sessionId
-                        )
-                      )
-                    }
-                  >
-                    {`Ses ${isSoundPlaying ? "Açık" : "Kapalı"}`}
-                  </button>
+                  <div className="form-check">
+                    {/* default check calismadi mecbut boyle uzun yoldan yaptim */}
+                    {sound === "off" ? (
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="soundRadios"
+                        id="offRadio"
+                        value="off"
+                        defaultChecked
+                      />
+                    ) : (
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="soundRadios"
+                        id="offRadio"
+                        value="off"
+                      />
+                    )}
+                    <label className="form-check-label" htmlFor="dropRadio">
+                      Off
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>{" "}
@@ -355,7 +355,10 @@ export const SessionAdmin = () => {
           </div>
         </div>
         {/* SAĞ TARAF */}
-        <div className="col-8 border border-dark" style={{ maxHeight: "100vh", overflowY: "unset"}}>
+        <div
+          className="col-8 border border-dark"
+          style={{ maxHeight: "100vh", overflowY: "unset" }}
+        >
           <Session admin={true} />
         </div>
       </div>

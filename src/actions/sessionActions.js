@@ -15,6 +15,9 @@ import {
   UPDATE_SESSION_WITH_SOCKET_DONE,
   UPDATE_SESSION_WITH_SOCKET_ERROR,
   SERVER_URL,
+  GET_SESSION_INFO_NOSOUND_START,
+  GET_SESSION_INFO_NOSOUND_DONE,
+  GET_SESSION_INFO_NOSOUND_ERROR,
 } from "../actions/actionConstants";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -105,6 +108,35 @@ export const getSessionInfo = (sessionId) => {
       .catch((error) => {
         dispatch({
           type: GET_SESSION_INFO_ERROR,
+          payload: error,
+        });
+      });
+  };
+};
+export const getSessionInfoWithNoSound = (sessionId) => {
+  return async (dispatch) => {
+    dispatch({
+      type: GET_SESSION_INFO_NOSOUND_START,
+    });
+
+    await axios
+      .get(`${SERVER_URL}/api/v1/sessions/${sessionId}`)
+      .then(({ data }) => {
+        // console.log(data);
+
+        if (data.success) {
+          dispatch({
+            type: GET_SESSION_INFO_NOSOUND_DONE,
+            payload: data.data,
+          });
+        } else {
+          // Bu kısımlar sonra
+          throw new Error(data.error);
+        }
+      })
+      .catch((error) => {
+        dispatch({
+          type: GET_SESSION_INFO_NOSOUND_ERROR,
           payload: error,
         });
       });

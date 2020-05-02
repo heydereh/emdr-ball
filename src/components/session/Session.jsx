@@ -32,7 +32,6 @@ export const Session = (props) => {
     drName,
     ballSpeed,
     isActive,
-    isSoundPlaying,
     sound,
     _id,
   } = useSelector((state) => {
@@ -46,7 +45,6 @@ export const Session = (props) => {
       isActive: state.currentSession.isActive,
       _id: state.currentSession._id,
       sound: state.currentSession.sound,
-      isSoundPlaying: state.currentSession.isSoundPlaying,
     };
   });
   // console.log(ballSpeed);
@@ -98,34 +96,34 @@ export const Session = (props) => {
   );
 
   const playSound = () => {
-    // console.log("SOUND PLAYING");
+    console.log("SOUND PLAYING");
     // soundToPlay.autoplay(true);
     soundToPlay.play();
   };
   const pauseSound = () => {
-    // console.log("SOUND PLAYING");
+    console.log("SOUND PAUSING");
     soundToPlay.pause();
   };
 
   // TODO Session cookie ye koy
   const [play, setPlay] = useState(false);
-  // console.log("PLAY " + play);
-  // console.log("IS SOUND PLAYIN " + isSoundPlaying);
+  console.log("PLAY " + play);
+  console.log("sound " + sound);
 
   const handleSound = () => {
     setPlay(!play);
   };
 
   useEffect(() => {
-    // console.log("PLAY IN EFFECT : " + play);
-    // console.log("IS SOUND PLAYING IN EFFECT : " + isSoundPlaying);
-    if (play && isSoundPlaying) {
+    console.log("PLAY IN EFFECT : " + play);
+    console.log("sound " + sound);
+    if (play && (sound !== 'off')) {
       playSound();
     }
-    if (!play || !isSoundPlaying) {
+    if (!play || (sound !== 'off')) {
       pauseSound();
     }
-  }, [play, isSoundPlaying]);
+  }, [play, sound]);
 
   const shape = new Map();
   const marginTopp = "";
@@ -254,13 +252,7 @@ export const Session = (props) => {
               className="btn btn-outline-info btn-sm"
               onClick={handleSound}
             >
-              <span>
-                <Music />
-              </span>
-              <span>
-                {isSoundPlaying ? <Pause size={20} /> : <Play size={20} />}
-              </span>{" "}
-              {isSoundPlaying && play ? "On" : "Off"}
+              {`Sesi ${play ? "kapat" : "aç"}`}
             </button>
           </div>
         )}
@@ -270,7 +262,7 @@ export const Session = (props) => {
       </div>
       <ReactInterval
         timeout={(speedArray[ballSpeed] * 1000) / 2}
-        enabled={!props.admin ? (isActive && isSoundPlaying && play) : (isActive && isSoundPlaying)}
+        enabled={!props.admin ? (isActive && (sound !== 'off') && play) ? true : false : (isActive && (sound !== 'off')) ? true : false }
         callback={() => {
           // console.log((speedArray[ballSpeed] * 1000) / 2);
           playSound();
