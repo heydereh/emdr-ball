@@ -34,11 +34,10 @@ export const updateSessionWithSocket = (options) => {
         type: UPDATE_SESSION_WITH_SOCKET_DONE,
         payload: options,
       });
-
     } else {
       dispatch({
         type: UPDATE_SESSION_WITH_SOCKET_ERROR,
-        payload: new Error('Güncellenecek veri yok')
+        payload: new Error("Güncellenecek veri yok"),
       });
     }
   };
@@ -114,7 +113,7 @@ export const getSessionInfo = (sessionId) => {
   };
 };
 export const getSessionInfoWithNoSound = (sessionId) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({
       type: GET_SESSION_INFO_NOSOUND_START,
     });
@@ -139,13 +138,17 @@ export const getSessionInfoWithNoSound = (sessionId) => {
           type: GET_SESSION_INFO_NOSOUND_ERROR,
           payload: error,
         });
+      })
+      .then(() => {
+        // console.log(getState().currentSession);
+        dispatch(updateSession({sound: 'off', _id: getState().currentSession._id}, sessionId))
       });
   };
 };
 
 export const updateSession = (options, sessionId) => {
   return async (dispatch) => {
-    console.log(options);
+    // console.log(options);
 
     dispatch({
       type: UPDATE_SESSION_START,

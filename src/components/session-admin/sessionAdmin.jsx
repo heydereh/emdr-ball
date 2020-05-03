@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useRouteMatch, useHistory } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 import { Pause, Play } from "react-feather";
-import { updateSession, getSessionInfoWithNoSound } from "../../actions/sessionActions";
+import {
+  updateSession,
+  getSessionInfoWithNoSound,
+} from "../../actions/sessionActions";
 import { Session } from "../session/Session";
 import { colorButton } from "../../helpers/colors";
 import {
@@ -15,9 +18,9 @@ import {
 } from "react-share";
 import copy from "copy-to-clipboard";
 import { Helmet } from "react-helmet";
+import { useRef } from "react";
 
 export const SessionAdmin = () => {
-  let history = useHistory();
   let match = useRouteMatch();
 
   const sessionId = match.params.sessionId;
@@ -47,6 +50,8 @@ export const SessionAdmin = () => {
    * shouldcomponentupdate alternatifi hook ile yeni render da state güncelleniyor
    */
   const [speedOfBall, setSpeed] = useState(ballSpeed);
+  const speedOfBallRef = useRef(speedOfBall);
+  speedOfBallRef.current = speedOfBall;
   // bunu page kapanınca tekrar update edeceğim için ayrı aldım
   const sound = useSelector((state) => state.currentSession.sound);
   // ShouldComponentMount
@@ -54,13 +59,33 @@ export const SessionAdmin = () => {
     setSpeed(ballSpeed);
   }, [ballSpeed]);
 
+  const handleSpeed = (e) => {
+    console.log(e.target.value);
+    setSpeed(e.target.value);
+    
+  };
+
+  /**
+   * Slider ın değerine göre otomatik hızı uyguluyor ama şu an çok fazla request atıyor ve sayfa
+   * yenilenince animasyonu başlatıyor. 
+   */
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     dispatch(updateSession({ isActive: false, _id: id }, sessionId));
+  //     dispatch(
+  //       updateSession(
+  //         { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
+  //         sessionId
+  //       )
+  //     );
+  //   }, 2000);
+  //   return () => clearTimeout(timeout);
+  // }, [speedOfBall]);
 
   const handleSound = (e) => {
     console.log(e.target.value);
 
-    dispatch(
-      updateSession({ sound: e.target.value, _id: id }, sessionId)
-    )
+    dispatch(updateSession({ sound: e.target.value, _id: id }, sessionId));
   };
 
   const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState(
@@ -74,7 +99,6 @@ export const SessionAdmin = () => {
 
   // paylaşım için full url path
   const shareUrlString = `${window.location.origin}/${sessionId}`;
-
 
   return (
     <div>
@@ -134,6 +158,7 @@ export const SessionAdmin = () => {
               <WhatsappIcon size={32} />
             </WhatsappShareButton>
           </div>
+          {/* HIZ AYARI  */}
           <div className="ml-2 mt-3">
             <div className="mt-2">{`SET SPEED [${speedOfBall}]`}</div>
             <div className="mt-2" id="speed-slider">
@@ -144,7 +169,7 @@ export const SessionAdmin = () => {
                 max="9"
                 value={speedOfBall}
                 className="slider w-100"
-                onChange={(e) => setSpeed(e.target.value)}
+                onChange={handleSpeed}
                 id="myRange"
               />
               <button
@@ -172,6 +197,8 @@ export const SessionAdmin = () => {
                 </span>
               </div>
             </div>
+            {/* HIZ AYARI SON */}
+            {/* ŞEKLİ AYARLA */}
             <div className="mt-2">ŞEKLİ SEÇ</div>
             <div
               className="mt-2 ml-2"
@@ -233,6 +260,7 @@ export const SessionAdmin = () => {
                 </div>
               </div>
             </div>
+            {/* ŞEKLİ AYARLA SON */}
             {/* soundRadioGroup */}
             <div className="mt-2">SESİ AYARLA</div>
             <div
@@ -322,7 +350,7 @@ export const SessionAdmin = () => {
               </div>
             </div>{" "}
             {/** sound radio group end */}
-            <div className="row mt-3 mb-2 mr-2 btn-group">
+            <div className="row mt-3 mb-2 mr-2 btn-group d-flex">
               <button
                 type="button"
                 className="btn btn-outline-info col-sm"

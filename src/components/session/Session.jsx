@@ -13,7 +13,6 @@ import socketIOClient from "socket.io-client";
 import ReactInterval from "react-interval";
 import useWindowSize from "../../helpers/useWindowSize";
 import { SERVER_URL_SOCKET } from "../../actions/actionConstants";
-import { Music, Pause, Play } from "react-feather";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 // const eventEmitter = require("events");
@@ -96,27 +95,27 @@ export const Session = (props) => {
   );
 
   const playSound = () => {
-    console.log("SOUND PLAYING");
+    // console.log("SOUND PLAYING");
     // soundToPlay.autoplay(true);
     soundToPlay.play();
   };
   const pauseSound = () => {
-    console.log("SOUND PAUSING");
+    // console.log("SOUND PAUSING");
     soundToPlay.pause();
   };
 
   // TODO Session cookie ye koy
   const [play, setPlay] = useState(false);
-  console.log("PLAY " + play);
-  console.log("sound " + sound);
+  // console.log("PLAY " + play);
+  // console.log("sound " + sound);
 
   const handleSound = () => {
     setPlay(!play);
   };
 
   useEffect(() => {
-    console.log("PLAY IN EFFECT : " + play);
-    console.log("sound " + sound);
+    // console.log("PLAY IN EFFECT : " + play);
+    // console.log("sound " + sound);
     if (play && (sound !== 'off')) {
       playSound();
     }
