@@ -22,7 +22,7 @@ const Home = () => {
   );
   const newSessionId = useSelector((state) => state.currentSession.sessionId);
 
-  const [errorString, setErrorString] = useState("");
+  // const [errorString, setErrorString] = useState("");
 
   // eslint-disable-next-line no-unused-vars
   const [drName, setDrName] = useState("");
@@ -49,19 +49,19 @@ const Home = () => {
       return false;
     }
   });
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("HANDLE SUBMIT");
-    console.log(drName);
-    console.log(patient);
+    // console.log("HANDLE SUBMIT");
+    // console.log(drName);
+    // console.log(patient);
 
-    // dispatch(
-    //   createSession({
-    //     drName: drName.toLowerCase().trim(),
-    //     patient: patient.toLowerCase().trim(),
-    //   })
-    // );
+    dispatch(
+      createSession({
+        drName: drName.toLowerCase().trim(),
+        patient: patient.toLowerCase().trim(),
+      })
+    );
   };
 
   return (
@@ -130,7 +130,7 @@ const Home = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-sm mt-2">
+                  {oldSessionsArrayOfObject.length > 0 && <div className="col-sm mt-2">
                     <div className="card mb-3">
                       <div
                         className="card-header"
@@ -173,7 +173,8 @@ const Home = () => {
                           })}
                       </div>
                     </div>
-                  </div>
+                  </div>}
+
                 </div>
               </div>
               {/* FORM END */}
