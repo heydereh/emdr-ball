@@ -65,115 +65,127 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <div style={{ height: "50vh" }}>
-        <header
-          className="text-white text-center"
-          style={{
-            background: `url(${background})no-repeat center center`,
-            backgroundSize: "cover",
-            height: "100%",
-          }}
-        >
-          <div className="overlay" />
-          <div className="">
-            <div className="row">
-              <div className="col-xl-9 mx-auto mt-5">
-                <h6 style={{ fontSize: "2rem" }} className="mb-5">
-                  EMDRTR'ye Hoş Geldiniz...
-                </h6>
+    <div style={{}}>
+      <div className="row " style={{height: "auto"}}>
+        <div className="col" >
+          <header
+            className="text-white text-center d-flex align-items-center justify-content-center"
+            style={{
+              background: `url(${background})no-repeat center center`,
+              backgroundSize: "cover",
+              height: "auto",
+              minHeight: "50vh"
+            }}
+          >
+            <div className="overlay"  />
+            <div className="" >
+              <div className="row" >
+                <div className="col mt-2 ml-1">
+                  <h6 style={{ fontSize: "2rem" }} className="">
+                    EMDRTR'ye Hoş Geldiniz...
+                  </h6>
+                </div>
               </div>
-            </div>
-            {/* FORM START */}
-            <div className="container container-xl">
-              <div className="row">
-                <div className="col-sm">
-                  <div className="card">
-                    <div
-                      className="card-header "
-                      style={{ backgroundColor: colorNavbar }}
-                    >
-                      <h3 className="pt-1">Seans Oluştur</h3>
-                    </div>
-                    <div className="card-body">
-                      <form onSubmit={handleSubmit}>
-                        <h4 className="text-secondary text-left">
-                          Ekranda Görünecek İsimler
-                        </h4>
-                        <input
-                          type="text"
-                          placeholder="Adınız.."
-                          maxLength={20}
-                          className="form-control mt-2"
-                          required
-                          onChange={(e) => setDrName(e.target.value)}
-                        />
-                        <input
-                          type="text"
-                          placeholder="Danışanınızın Adı.."
-                          maxLength={20}
-                          className="form-control mt-3"
-                          required
-                          onChange={(e) => setPatientName(e.target.value)}
-                        />
-                        <button
-                          href=""
-                          type="submit"
-                          className="btn btn-primary mt-3"
-                          style={{ backgroundColor: colorButton }}
-                        >
-                          Oluştur
-                        </button>
-                      </form>
+              {/* FORM START */}
+              <div className="container align-items-center mt-2">
+                <div className="row" >
+                  <div className="col-sm mt-2">
+                    <div className="card mb-3">
+                      <div
+                        className="card-header "
+                        style={{ backgroundColor: colorNavbar }}
+                      >
+                        <h3 style={{ fontSize: "1.4rem" }} className="pt-1">Seans Oluştur</h3>
+                      </div>
+                      <div className="card-body h-auto">
+                        <form onSubmit={handleSubmit}>
+                          <h4 style={{ fontSize: "1rem" }} className="text-secondary text-left">
+                            Ekranda Görünecek İsimler
+                          </h4>
+                          <input
+                            type="text"
+                            placeholder="Adınız.."
+                            maxLength={20}
+                            className="form-control mt-2"
+                            required
+                            onChange={(e) => setDrName(e.target.value)}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Danışanınızın Adı.."
+                            maxLength={20}
+                            className="form-control mt-3"
+                            required
+                            onChange={(e) => setPatientName(e.target.value)}
+                          />
+                          <button
+                            href=""
+                            type="submit"
+                            className="btn btn-primary mt-3"
+                            style={{ backgroundColor: colorButton }}
+                          >
+                            Oluştur
+                          </button>
+                        </form>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-sm">
-                  <div className="card">
-                    <div className="card-header" style={{ backgroundColor: colorNavbar }}>
-                      <h5 className="pt-2">Son 24 Saat İçerisindeki Seanslarınız</h5>
-                    </div>
-                    <div className="" style={{ maxHeight: "14.3rem", overflowY: "scroll" }}>
-                    {oldSessionsArrayOfObject
-                    .reverse()
-                    .map((oldSession, index) => {
-                      const createdDateInstance = new Date.prototype.constructor(
-                        Date.parse(oldSession.createdAt)
-                      );
-                      const difference = hours(
-                        new Date() - createdDateInstance
-                      );
+                  <div className="col-sm mt-2">
+                    <div className="card mb-3">
+                      <div
+                        className="card-header"
+                        style={{ backgroundColor: colorNavbar }}
+                      >
+                        <h5 className="pt-2">
+                          Son 24 saat içerisindeli seanslarınız.
+                        </h5>
+                      </div>
+                      <div
+                        className=""
+                        style={{ maxHeight: "210px", overflowY: "scroll" }}
+                      >
+                        {oldSessionsArrayOfObject
+                          .reverse()
+                          .map((oldSession, index) => {
+                            const createdDateInstance = new Date.prototype.constructor(
+                              Date.parse(oldSession.createdAt)
+                            );
+                            const difference = hours(
+                              new Date() - createdDateInstance
+                            );
 
-                      return (
-                        <a
-                          key={index}
-                          href={`/admin/${oldSession.sessionId}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="list-group-item list-group-item-action border-bottom"
-                        >
-                          <div className="d-flex w-100 justify-content-between">
-                            <h5 className="mb-1">{oldSession.patient}</h5>
-                            <small className="text-muted ml-1">
-                              {difference} saat önce
-                            </small>
-                          </div>
-                        </a>
-                      );
-                    })}
+                            return (
+                              <a
+                                key={index}
+                                href={`/admin/${oldSession.sessionId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="list-group-item list-group-item-action border-bottom"
+                              >
+                                <div className="d-flex w-100 justify-content-between">
+                                  <h5 className="mb-1">{oldSession.patient}</h5>
+                                  <small className="text-muted ml-1">
+                                    {difference} saat önce
+                                  </small>
+                                </div>
+                              </a>
+                            );
+                          })}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              {/* FORM END */}
             </div>
-            {/* FORM END */}
-          </div>
-        </header>
+          </header>
+        </div>
       </div>
-      <div style={{ height: "50vh" }}>
+      <div className="row " style={{height: "auto"}}>
+        <div className="col">
         <section
           className="features-icons bg-light text-center"
-          style={{ height: "100%" }}
+          style={{ height: "auto" }}
         >
           <div className="container">
             <div className="row">
@@ -215,6 +227,7 @@ const Home = () => {
             </div>
           </div>
         </section>
+        </div>
       </div>
     </div>
   );

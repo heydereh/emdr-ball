@@ -18,34 +18,36 @@ const App = () => {
   // const isAdmin = location.pathname.includes('admin')
   return (
     <Router history={history}>
-      <div className="App">
-    </div>
-      <div
-        className={`${cinemaMod ? "opacity-1" : "color-background"}`}
-        style={{}}
-      >
-        <div>
-          <Appbar cinemaMod={cinemaMod} toggleCinemaMod={setCinemaMod} />
-        </div>
-        <div id="main-container" >
-          <Switch>
-            <Route path="/" exact component={() => <Redirect to={"/home"} />} />
-            <Route path="/home" exact component={() => <Home />} />
-            <Route path="/admin" exact component={() => <Admin />} />
-            <Route
-              path="/admin/:sessionId"
-              exact
-              component={() => <SessionAdmin />}
-            />
-            <Route
-              path="/:sessionId"
-              exact
-              component={() => (
-                <Session cinemaMod={cinemaMod} toggleCinemaMod={setCinemaMod} />
-              )}
-            />
-          </Switch>
-        </div>
+      <div className={`${cinemaMod ? "opacity-1" : "color-background"}`} style={{height: "100%"}} >
+          <div>
+            <Appbar cinemaMod={cinemaMod} toggleCinemaMod={setCinemaMod} />
+          </div>
+          <div id="main-container">
+            <Switch>
+              <Route
+                path="/"
+                exact
+                component={() => <Redirect to={"/home"} />}
+              />
+              <Route path="/home" exact component={() => <Home />} />
+              <Route path="/admin" exact component={() => <Admin />} />
+              <Route
+                path="/admin/:sessionId"
+                exact
+                component={() => <SessionAdmin />}
+              />
+              <Route
+                path="/:sessionId"
+                exact
+                component={() => (
+                  <Session
+                    cinemaMod={cinemaMod}
+                    toggleCinemaMod={setCinemaMod}
+                  />
+                )}
+              />
+            </Switch>
+            </div>
       </div>
     </Router>
   );
