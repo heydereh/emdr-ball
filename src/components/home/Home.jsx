@@ -2,55 +2,73 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getSessionInfo } from "../../actions/sessionActions";
+import { createSession } from "../../actions/sessionActions";
+import Cookies from "js-cookie";
+
 import background from "./bg-masthead.jpg";
-import { colorButton } from "../../helpers/colors";
+import { colorButton, colorNavbar } from "../../helpers/colors";
 import "./home.css";
+import { hours } from "../../helpers/timeConversions";
 
 const Home = () => {
   const history = useHistory();
   // const sessionId = "1584986021338";
 
-  const pushTo = (someWhere) => history.push(someWhere)
+  const pushTo = (someWhere) => history.push(someWhere);
   const dispatch = useDispatch();
 
-  const [sessionId, setsessionId] = useState("");
-  // console.log(sessionId);
-
-  const { getSessionError, getSessionLoaded, loadedSessionId } = useSelector(
-    (state) => {
-      // console.log(state);
-
-      return {
-        getSessionLoaded: state.currentSession.getSessionLoaded,
-        getSessionError: state.currentSession.getSessionError,
-        loadedSessionId: state.currentSession.sessionId,
-      };
-    }
+  const hasSessionCreated = useSelector(
+    (state) => state.currentSession.sessionCreateLoaded
   );
-  // console.log(getSessionError);
-  // console.log(getSessionLoaded);
-  
-  const [errorString, setErrorString] = useState("")
+  const newSessionId = useSelector((state) => state.currentSession.sessionId);
+
+  const [errorString, setErrorString] = useState("");
+
+  // eslint-disable-next-line no-unused-vars
+  const [drName, setDrName] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [patient, setPatientName] = useState("");
 
   useEffect(() => {
-    if (getSessionLoaded) {
-      pushTo(`/${loadedSessionId}`);
+    if (hasSessionCreated && newSessionId !== -1) {
+      pushTo(`/admin/${newSessionId}`);
     }
-    if (getSessionError) {
-        setErrorString(getSessionError.response.data.error)
+  });
+
+  const oldSessions = Object.entries(Cookies.get());
+  // her bir entry si yine array bu array in 2. elemani bize lazim olan obje
+  const oldSessionsArrayOfObject = [];
+  // yukarida cookielerin hepsi alindigi icin parse edilebilir olanlari almam gerekti
+  oldSessions.map((sessionStringArray) => {
+    let parsedJson = "";
+    try {
+      parsedJson = JSON.parse(sessionStringArray[1]);
+      oldSessionsArrayOfObject.push(parsedJson);
+      return true;
+    } catch (error) {
+      return false;
     }
-  }); // burada eslint hata veriyodu kaldirttim
+  });
 
   const handleSubmit = (e) => {
-    dispatch(getSessionInfo(sessionId));
+    e.preventDefault();
+    console.log("HANDLE SUBMIT");
+    console.log(drName);
+    console.log(patient);
+
+    // dispatch(
+    //   createSession({
+    //     drName: drName.toLowerCase().trim(),
+    //     patient: patient.toLowerCase().trim(),
+    //   })
+    // );
   };
 
   return (
     <div>
       <div style={{ height: "50vh" }}>
         <header
-          className="masthead text-white text-center"
+          className="text-white text-center"
           style={{
             background: `url(${background})no-repeat center center`,
             backgroundSize: "cover",
@@ -60,55 +78,95 @@ const Home = () => {
           <div className="overlay" />
           <div className="">
             <div className="row">
-              <div className="col-xl-9 mx-auto">
+              <div className="col-xl-9 mx-auto mt-5">
                 <h6 style={{ fontSize: "2rem" }} className="mb-5">
                   EMDRTR'ye Hoş Geldiniz...
                 </h6>
               </div>
-              <div className="col-md-10 col-lg-8 col-xl-7 mx-auto">
-                <form>
-                  <div className="form-row">
-                    <div className="col-12 col-md-9 mb-2 mb-md-0">
-                      <input
-                        onChange={(event) => setsessionId(event.target.value)}
-                        type="text"
-                        className="form-control form-control-lg"
-                        placeholder="Seans numaranızı giriniz..."
-                      />
+            </div>
+            {/* FORM START */}
+            <div className="container container-xl">
+              <div className="row">
+                <div className="col-sm">
+                  <div className="card">
+                    <div
+                      className="card-header "
+                      style={{ backgroundColor: colorNavbar }}
+                    >
+                      <h3 className="pt-1">Seans Oluştur</h3>
                     </div>
-                    <div className="col-12 col-md-3">
-                      <button
-                        className="btn btn-block btn-lg"
-                        type=""
-                        style={{
-                          backgroundColor: colorButton,
-                          color: "inherit",
-                        }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleSubmit();
-                        }}
-                      >
-                        Giriş
-                      </button>
+                    <div className="card-body">
+                      <form onSubmit={handleSubmit}>
+                        <h4 className="text-secondary text-left">
+                          Ekranda Görünecek İsimler
+                        </h4>
+                        <input
+                          type="text"
+                          placeholder="Adınız.."
+                          maxLength={20}
+                          className="form-control mt-2"
+                          required
+                          onChange={(e) => setDrName(e.target.value)}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Danışanınızın Adı.."
+                          maxLength={20}
+                          className="form-control mt-3"
+                          required
+                          onChange={(e) => setPatientName(e.target.value)}
+                        />
+                        <button
+                          href=""
+                          type="submit"
+                          className="btn btn-primary mt-3"
+                          style={{ backgroundColor: colorButton }}
+                        >
+                          Oluştur
+                        </button>
+                      </form>
                     </div>
                   </div>
-                </form>
-              </div>
-            </div>
+                </div>
+                <div className="col-sm">
+                  <div className="card">
+                    <div className="card-header" style={{ backgroundColor: colorNavbar }}>
+                      <h5 className="pt-2">Son 24 Saat İçerisindeki Seanslarınız</h5>
+                    </div>
+                    <div className="" style={{ maxHeight: "14.3rem", overflowY: "scroll" }}>
+                    {oldSessionsArrayOfObject
+                    .reverse()
+                    .map((oldSession, index) => {
+                      const createdDateInstance = new Date.prototype.constructor(
+                        Date.parse(oldSession.createdAt)
+                      );
+                      const difference = hours(
+                        new Date() - createdDateInstance
+                      );
 
-
-            {getSessionError && getSessionError.response &&
-          getSessionError.response.data &&
-          getSessionError.response.data.error && <div className="row">
-              <div className="col-xl-7 col-lg-8 col-md-10 mx-auto">
-                <div className="alert alert-danger fluid" role="alert">
-                {errorString}
+                      return (
+                        <a
+                          key={index}
+                          href={`/admin/${oldSession.sessionId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="list-group-item list-group-item-action border-bottom"
+                        >
+                          <div className="d-flex w-100 justify-content-between">
+                            <h5 className="mb-1">{oldSession.patient}</h5>
+                            <small className="text-muted ml-1">
+                              {difference} saat önce
+                            </small>
+                          </div>
+                        </a>
+                      );
+                    })}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>}
-
-
+            </div>
+            {/* FORM END */}
           </div>
         </header>
       </div>
