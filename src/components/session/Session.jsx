@@ -15,7 +15,8 @@ import useWindowSize from "../../helpers/useWindowSize";
 import { SERVER_URL_SOCKET } from "../../actions/actionConstants";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-// const eventEmitter = require("events");
+import {Howl, Howler} from 'howler';
+import Cookies from 'js-cookie'
 
 export const Session = (props) => {
   let match = useRouteMatch();
@@ -88,28 +89,33 @@ export const Session = (props) => {
     },
   };
 
-  const soundToPlay = new Audio(
-    sound === "drip"
-      ? `${process.env.PUBLIC_URL}/drip.mp3`
-      : `${process.env.PUBLIC_URL}/drop.mp3`
-  );
+  const soundToPlay = new Howl({
+    src: sound === 'drip' ? `${process.env.PUBLIC_URL}/drip.mp3` : `${process.env.PUBLIC_URL}/drop.mp3`,
+    
+
+  });
 
   const playSound = () => {
-    // console.log("SOUND PLAYING");
-    // soundToPlay.autoplay(true);
     soundToPlay.play();
   };
   const pauseSound = () => {
-    // console.log("SOUND PAUSING");
     soundToPlay.pause();
   };
 
-  // TODO Session cookie ye koy
-  const [play, setPlay] = useState(false);
-  // console.log("PLAY " + play);
-  // console.log("sound " + sound);
+  const [play, setPlay] = useState(Cookies.get('allowSound') || false);
+
+  useEffect(() => {
+    if (Cookies.get('allowSound') === true) {
+      if (play === false) {
+        console.log("COOKIE DEN SETPLAY");
+        
+        setPlay(true)
+      }
+    }
+  })
 
   const handleSound = () => {
+    Cookies.set('allowSound', !play)
     setPlay(!play);
   };
 
@@ -251,7 +257,7 @@ export const Session = (props) => {
               className="btn btn-outline-info btn-sm"
               onClick={handleSound}
             >
-              {`Sesi ${play ? "kapat" : "aç"}`}
+              {`Sesi ${!!play ? "kapat" : "aç"}`}
             </button>
           </div>
         )}
