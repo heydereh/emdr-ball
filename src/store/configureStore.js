@@ -10,7 +10,7 @@ import logger from 'redux-logger';
  */
 export const configureStore = () => {
 
-    const middlewares = [thunk, logger];
+    const middlewares = [thunk, /* logger */];
 
     const middlewareEnhancer = applyMiddleware(...middlewares);
 
