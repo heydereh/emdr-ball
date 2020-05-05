@@ -15,6 +15,7 @@ import useWindowSize from "../../helpers/useWindowSize";
 import { SERVER_URL_SOCKET } from "../../actions/actionConstants";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
+// eslint-disable-next-line no-unused-vars
 import {Howl, Howler} from 'howler';
 import Cookies from 'js-cookie'
 
@@ -67,10 +68,12 @@ export const Session = (props) => {
   useEffect(() => {
     // console.log(socket);
     if (_id) {
+
       socket.on(_id, (data) => {
         if (data) {
           dispatch(updateSessionWithSocket(data));
         }
+        socket.on('disconnect', () => console.log("socket disconnect"))
       });
     }
 

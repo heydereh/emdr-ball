@@ -7,7 +7,6 @@ import {
   getSessionInfoWithNoSound,
 } from "../../actions/sessionActions";
 import { Session } from "../session/Session";
-import { colorButton } from "../../helpers/colors";
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -19,6 +18,9 @@ import {
 import copy from "copy-to-clipboard";
 import { Helmet } from "react-helmet";
 import { useRef } from "react";
+import Nouislider from 'nouislider-react'
+import "nouislider/distribute/nouislider.css";
+
 
 export const SessionAdmin = () => {
   let match = useRouteMatch();
@@ -33,11 +35,12 @@ export const SessionAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { ballShape, ballSpeed } = useSelector((state) => ({
+  const { ballShape, ballSpeed, isActive } = useSelector((state) => ({
     ballShape: state.currentSession.ballShape,
     direction: state.currentSession.direction,
     ballSpeed: state.currentSession.ballSpeed,
     isSoundPlaying: state.currentSession.isSoundPlaying,
+    isActive: state.currentSession.isActive,
   }));
   // bunu yukarıdaki gruba ekleyince alamadı bi türlü
   const id = useSelector((state) => state.currentSession._id);
@@ -59,31 +62,38 @@ export const SessionAdmin = () => {
     setSpeed(ballSpeed);
   }, [ballSpeed]);
 
-  const handleSpeed = (e) => {
-    console.log(e.target.value);
-    setSpeed(e.target.value);
+  const handleSpeed = (sliderSpeed) => {
+    setSpeed(parseInt(sliderSpeed));
     
   };
+
+
+  const startStopToggle = () => {
+    // console.log(isActive);
+    dispatch(
+      updateSession({ isActive: !isActive, _id: id }, sessionId)
+    )
+  }
 
   /**
    * Slider ın değerine göre otomatik hızı uyguluyor ama şu an çok fazla request atıyor ve sayfa
    * yenilenince animasyonu başlatıyor. 
    */
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     dispatch(updateSession({ isActive: false, _id: id }, sessionId));
-  //     dispatch(
-  //       updateSession(
-  //         { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
-  //         sessionId
-  //       )
-  //     );
-  //   }, 2000);
-  //   return () => clearTimeout(timeout);
-  // }, [speedOfBall]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      dispatch(updateSession({ isActive: false, _id: id }, sessionId));
+      dispatch(
+        updateSession(
+          { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
+          sessionId
+        )
+      );
+    }, 2000);
+    return () => clearTimeout(timeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speedOfBall]);
 
   const handleSound = (e) => {
-    console.log(e.target.value);
 
     dispatch(updateSession({ sound: e.target.value, _id: id }, sessionId));
   };
@@ -160,42 +170,9 @@ export const SessionAdmin = () => {
           </div>
           {/* HIZ AYARI  */}
           <div className="ml-2 mt-3">
-            <div className="mt-2">{`SET SPEED [${speedOfBall}]`}</div>
-            <div className="mt-2" id="speed-slider">
-              <input
-                style={{}}
-                type="range"
-                min="1"
-                max="9"
-                value={speedOfBall}
-                className="slider w-100"
-                onChange={handleSpeed}
-                id="myRange"
-              />
-              <button
-                style={{ backgroundColor: colorButton }}
-                className="btn text-light"
-                onClick={() =>
-                  dispatch(
-                    updateSession(
-                      { ballSpeed: speedOfBall, _id: id },
-                      sessionId
-                    )
-                  )
-                }
-              >
-                Hızı Ayarla
-              </button>
-              <div>
-                <span>
-                  <label
-                    className="text-danger"
-                    style={{ fontSize: "smaller" }}
-                  >
-                    <sub>*Animasyonu yeniden başlatmanız tavsiyet olunur</sub>
-                  </label>
-                </span>
-              </div>
+            <div className="mt-2 mb-1">{`HIZI AYARLA [${speedOfBall}]`}</div>
+            <div>
+                <Nouislider range={{min: 1, max: 9 }} tooltips={[false]} start={speedOfBall} connect step={1} onEnd={(sliderSpeed) => handleSpeed(sliderSpeed)} />
             </div>
             {/* HIZ AYARI SON */}
             {/* ŞEKLİ AYARLA */}
@@ -353,31 +330,13 @@ export const SessionAdmin = () => {
             <div className="row mt-3 mb-2 mr-2 btn-group d-flex">
               <button
                 type="button"
-                className="btn btn-outline-info col-sm"
-                onClick={() =>
-                  dispatch(
-                    updateSession({ isActive: false, _id: id }, sessionId)
-                  )
-                }
-              >
-                <span>
-                  <Pause size={20} />
-                </span>{" "}
-                Duraklat
-              </button>
-              <button
-                type="button"
                 className="btn btn-outline-info btn-sm col-sm mb-2"
-                onClick={() =>
-                  dispatch(
-                    updateSession({ isActive: true, _id: id }, sessionId)
-                  )
-                }
+                onClick={startStopToggle}
               >
                 <span>
-                  <Play size={20} />{" "}
+                  {isActive ? <Pause size={20} /> : <Play size={20} />}
                 </span>
-                Başlat
+                {`${isActive ? "Duraklat" : "Başlat"}`}
               </button>
             </div>
           </div>
