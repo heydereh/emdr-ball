@@ -18,6 +18,9 @@ import { Helmet } from "react-helmet";
 // eslint-disable-next-line no-unused-vars
 import {Howl, Howler} from 'howler';
 import Cookies from 'js-cookie'
+import useNoSleep from "use-no-sleep";
+
+
 
 export const Session = (props) => {
   let match = useRouteMatch();
@@ -219,6 +222,8 @@ export const Session = (props) => {
   const size = useWindowSize();
   // console.log(size);
 
+  const [screen, setScreenAwake] = useState(false)
+  useNoSleep(screen)
   return (
     <div
       className={`${size.width > 999 ? "container" : ""}`}
@@ -257,10 +262,17 @@ export const Session = (props) => {
             </button>
             <button
               type="button"
-              className="btn btn-outline-info btn-sm"
+              className="btn btn-outline-info btn-sm mr-2"
               onClick={handleSound}
             >
               {`Sesi ${!!play ? "kapat" : "aç"}`}
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-info btn-sm mr-2"
+              onClick={() => setScreenAwake(!screen)}
+            >
+              {`Ekranı açık tut - ${!!screen ? "kapat" : "aç"}`}
             </button>
           </div>
         )}
