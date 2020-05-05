@@ -19,6 +19,9 @@ import {
 import copy from "copy-to-clipboard";
 import { Helmet } from "react-helmet";
 import { useRef } from "react";
+import Nouislider from 'nouislider-react'
+import "nouislider/distribute/nouislider.css";
+
 
 export const SessionAdmin = () => {
   let match = useRouteMatch();
@@ -59,9 +62,9 @@ export const SessionAdmin = () => {
     setSpeed(ballSpeed);
   }, [ballSpeed]);
 
-  const handleSpeed = (e) => {
-    console.log(e.target.value);
-    setSpeed(e.target.value);
+  const handleSpeed = (sliderSpeed) => {
+    console.log(parseInt(sliderSpeed));
+    setSpeed(parseInt(sliderSpeed));
     
   };
 
@@ -69,18 +72,18 @@ export const SessionAdmin = () => {
    * Slider ın değerine göre otomatik hızı uyguluyor ama şu an çok fazla request atıyor ve sayfa
    * yenilenince animasyonu başlatıyor. 
    */
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     dispatch(updateSession({ isActive: false, _id: id }, sessionId));
-  //     dispatch(
-  //       updateSession(
-  //         { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
-  //         sessionId
-  //       )
-  //     );
-  //   }, 2000);
-  //   return () => clearTimeout(timeout);
-  // }, [speedOfBall]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      dispatch(updateSession({ isActive: false, _id: id }, sessionId));
+      dispatch(
+        updateSession(
+          { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
+          sessionId
+        )
+      );
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, [speedOfBall]);
 
   const handleSound = (e) => {
     console.log(e.target.value);
@@ -161,41 +164,8 @@ export const SessionAdmin = () => {
           {/* HIZ AYARI  */}
           <div className="ml-2 mt-3">
             <div className="mt-2">{`SET SPEED [${speedOfBall}]`}</div>
-            <div className="mt-2" id="speed-slider">
-              <input
-                style={{}}
-                type="range"
-                min="1"
-                max="9"
-                value={speedOfBall}
-                className="slider w-100"
-                onChange={handleSpeed}
-                id="myRange"
-              />
-              <button
-                style={{ backgroundColor: colorButton }}
-                className="btn text-light"
-                onClick={() =>
-                  dispatch(
-                    updateSession(
-                      { ballSpeed: speedOfBall, _id: id },
-                      sessionId
-                    )
-                  )
-                }
-              >
-                Hızı Ayarla
-              </button>
-              <div>
-                <span>
-                  <label
-                    className="text-danger"
-                    style={{ fontSize: "smaller" }}
-                  >
-                    <sub>*Animasyonu yeniden başlatmanız tavsiyet olunur</sub>
-                  </label>
-                </span>
-              </div>
+            <div>
+                <Nouislider range={{min: 1, max: 9 }} tooltips={[true]} start={speedOfBall} connect step={1} onEnd={(sliderSpeed) => handleSpeed(sliderSpeed)} />
             </div>
             {/* HIZ AYARI SON */}
             {/* ŞEKLİ AYARLA */}

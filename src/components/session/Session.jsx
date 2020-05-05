@@ -67,10 +67,12 @@ export const Session = (props) => {
   useEffect(() => {
     // console.log(socket);
     if (_id) {
+
       socket.on(_id, (data) => {
         if (data) {
           dispatch(updateSessionWithSocket(data));
         }
+        socket.on('disconnect', () => console.log("socket disconnect"))
       });
     }
 
