@@ -1,20 +1,12 @@
 import {
-  SESSION_CREATE_START,
-  SESSION_CREATE_DONE,
-  SESSION_CREATE_ERROR,
-  GET_SESSION_INFO_START,
-  GET_SESSION_INFO_DONE,
-  GET_SESSION_INFO_ERROR,
-  GET_SESSION_INFO_NOSOUND_START,
-  GET_SESSION_INFO_NOSOUND_DONE,
-  GET_SESSION_INFO_NOSOUND_ERROR,
-  DELETE_SESSION_ERROR,
-  DELETE_SESSION_START,
-  DELETE_SESSION_DONE,
   UPDATE_SESSION_WITH_SOCKET_START,
   UPDATE_SESSION_WITH_SOCKET_DONE,
   UPDATE_SESSION_WITH_SOCKET_ERROR,
+  GET_SESSION_INFO,
+  SESSION_CREATE,
+  UPDATE_BALL_SPEED,
 } from "../actions/actionConstants";
+import { handle } from "redux-pack";
 
 const initialState = {
   _id: "",
@@ -36,151 +28,207 @@ const initialState = {
   sessionDeleteLoading: false,
   sessionDeleteLoaded: false,
   sessionDeleteError: null,
+  sessionUpdateLoading: false,
+  sessionUpdateLoaded: false,
+  sessionUpdateError: null,
+  ballSpeedUpdateLoading: false,
+  ballSpeedUpdateLoaded: false,
+  ballSpeedUpdateError: null,
 };
 
 const sessionReducer = (state = initialState, action) => {
-  // console.log(action);
+  console.log(action);
 
   switch (action.type) {
-    case SESSION_CREATE_START:
+    case SESSION_CREATE:
+      return handle(state, action, {
+        start: (prevState) => {
+          return {
+            ...prevState,
+            sessionCreateLoading: true,
+            sessionCreateError: null,
+            sessionCreateLoaded: false,
+            sessionId: -1,
+            createdAt: null,
+            patient: null,
+            ballShape: "square",
+            direction: "right",
+            ballSpeed: "0",
+            isActive: false,
+            getSessionLoading: false,
+            getSessionError: null,
+            getSessionLoaded: false,
+            sessionDeleteLoading: true,
+            sessionDeleteLoaded: false,
+            sessionDeleteError: null,
+            updating: false,
+            updated: true,
+            updateError: null,
+          };
+        },
+        success: (prevState) => {
+          return {
+            ...prevState,
+            sessionCreateLoaded: true,
+            sessionCreateLoading: false,
+            sessionCreateError: null,
+            sessionId: action.payload.data.data.sessionId,
+            createdAt: Date.now(),
+            patient: action.payload.data.data.patient,
+            ballShape: action.payload.data.data.ballShape,
+            direction: action.payload.data.data.direction,
+            ballSpeed: action.payload.data.data.ballSpeed,
+            isActive: action.payload.data.data.isActive,
+          };
+        },
+        failure: (prevState) => {
+          return {
+            ...prevState,
+            sessionCreateLoading: false,
+            sessionCreateError:
+              (action.payload &&
+                action.payload.response &&
+                action.payload.response.data &
+                  action.payload.response.data.error &&
+                action.payload.response.data.error) ||
+              "baglanti hatasi",
+          };
+        },
+        finish: (prevState) => {
+          return {
+            ...prevState,
+          };
+        },
+      });
+    /* case UPDATE_SESSION:
+      return handle(state, action, {
+        start: (prevState) => {
+          return {
+            ...prevState,
+            sessionUpdateLoading: true,
+            sessionUpdateLoaded: false,
+            sessionUpdateError: null,
+          };
+        },
+        success: (prevState) => {
+          return {
+            ...prevState,
+            sessionUpdateLoaded: true,
+            ballShape: action.payload.data.data.ballShape,
+            direction: action.payload.data.data.direction,
+            ballSpeed: action.payload.data.data.ballSpeed,
+            isActive: action.payload.data.data.isActive,
+            isSoundPlaying: action.payload.data.data.isSoundPlaying,
+            sound: action.payload.data.data.sound,
+          };
+        },
+        failure: (prevState) => {
+          return {
+            ...prevState,
+            sessionUpdateLoading: false,
+            sessionUpdateError:
+              (action.payload &&
+                action.payload.response &&
+                action.payload.response.data &
+                  action.payload.response.data.error &&
+                action.payload.response.data.error) ||
+              "baglanti hatasi",
+          };
+        },
+        finish: (prevState) => {
+          return {
+            ...prevState,
+          };
+        },
+      }); */
+    case GET_SESSION_INFO:
+      return handle(state, action, {
+        start: (prevState) => ({
+          ...prevState,
+          getSessionLoading: false,
+          getSessionError: null,
+          getSessionLoaded: false,
+        }),
+        success: (prevState) => {
+          return {
+            ...prevState,
+            getSessionLoaded: true,
+            _id: action.payload.data.data._id,
+            getSessionLoading: false,
+            sessionId: action.payload.data.data.sessionId,
+            createdAt: action.payload.data.data.createdAt,
+            patient: action.payload.data.data.patient,
+            ballShape: action.payload.data.data.ballShape,
+            direction: action.payload.data.data.direction,
+            ballSpeed: action.payload.data.data.ballSpeed,
+            isActive: action.payload.data.data.isActive,
+            hasBallStarted: action.payload.data.data.hasBallStarted,
+            drName: action.payload.data.data.drName,
+            isSoundPlaying: action.payload.data.data.isSoundPlaying,
+            sound: action.payload.data.data.sound,
+          };
+        },
+        failure: (prevState) => {
+          return {
+            ...prevState,
+            getSessionLoading: false,
+            getSessionError:
+              (action.payload &&
+                action.payload.response &&
+                action.payload.response.data &
+                  action.payload.response.data.error &&
+                action.payload.response.data.error) ||
+              "baglanti hatasi",
+            getSessionLoaded: false,
+          };
+        },
+        finish: (prevState) => ({
+          ...prevState,
+        }),
+      });
+    case UPDATE_BALL_SPEED:
+      console.log(state);
+      console.log(action);
+      return handle(state, action, {
+        start: (prevState) => {
+          console.log("SPEED START");
+
+          return {
+            ...prevState,
+            ballSpeedUpdateLoading: true,
+            ballSpeedUpdateLoaded: false,
+            ballSpeedUpdateError: null,
+          };
+        },
+        success: (prevState) => {
+          console.log("SPEED SUCCESS");
+
+          return {
+            ...prevState,
+            ballSpeedUpdateLoading: false,
+            ballSpeedUpdateLoaded: true,
+          };
+        },
+        failure: (prevState) => {
+          console.log("SPEED FAILURE");
+
+          return {
+            ...prevState,
+            ballSpeedUpdateError: (action.payload &&
+              action.payload.response &&
+              action.payload.response.data &
+                action.payload.response.data.error &&
+              action.payload.response.data.error) ||
+            "baglanti hatasi",
+          };
+        },
+      });
+    case UPDATE_SESSION_WITH_SOCKET_START:
       return {
         ...state,
-        sessionCreateLoading: true,
-        sessionCreateError: null,
-        sessionCreateLoaded: false,
-        sessionId: -1,
-        createdAt: null,
-        patient: null,
-        ballShape: "square",
-        direction: "right",
-        ballSpeed: "0",
-        isActive: false,
-        getSessionLoading: false,
-        getSessionError: null,
-        getSessionLoaded: false,
-        sessionDeleteLoading: true,
-        sessionDeleteLoaded: false,
-        sessionDeleteError: null,
-        updating: false,
-        updated: true,
-        updateError: null,
+        updating: true,
       };
-    case SESSION_CREATE_DONE:
-      return {
-        ...state,
-        sessionCreateLoading: false,
-        sessionCreateError: null,
-        sessionCreateLoaded: true,
-        sessionId: action.payload.sessionId,
-        createdAt: Date.now(),
-        patient: action.payload.patient,
-        ballShape: action.payload.ballShape,
-        direction: action.payload.direction,
-        ballSpeed: action.payload.ballSpeed,
-        isActive: action.payload.isActive,
-        hasBallStarted: action.payload.hasBallStarted,
-      };
-    case SESSION_CREATE_ERROR:
-      return {
-        ...state,
-        sessionCreateLoading: false,
-        sessionCreateError: action.payload,
-        sessionCreateLoaded: false,
-        sessionId: -1,
-        createdAt: null,
-        patient: null,
-      };
-    case GET_SESSION_INFO_START:
-      return {
-        ...state,
-        getSessionLoading: false,
-        getSessionError: null,
-        getSessionLoaded: false,
-      };
-    case GET_SESSION_INFO_DONE:
-      return {
-        ...state,
-        _id: action.payload._id,
-        getSessionLoading: false,
-        getSessionLoaded: true,
-        sessionId: action.payload.sessionId,
-        createdAt: action.payload.createdAt,
-        patient: action.payload.patient,
-        ballShape: action.payload.ballShape,
-        direction: action.payload.direction,
-        ballSpeed: action.payload.ballSpeed,
-        isActive: action.payload.isActive,
-        hasBallStarted: action.payload.hasBallStarted,
-        drName: action.payload.drName,
-        isSoundPlaying: action.payload.isSoundPlaying,
-        sound: action.payload.sound,
-      };
-    case GET_SESSION_INFO_ERROR:
-      return {
-        ...state,
-        getSessionLoading: false,
-        getSessionError: action.payload,
-        getSessionLoaded: false,
-      };
-      case GET_SESSION_INFO_NOSOUND_START:
-      return {
-        ...state,
-        getSessionLoading: false,
-        getSessionError: null,
-        getSessionLoaded: false,
-      };
-    case GET_SESSION_INFO_NOSOUND_DONE:
-      return {
-        ...state,
-        _id: action.payload._id,
-        getSessionLoading: false,
-        getSessionLoaded: true,
-        sessionId: action.payload.sessionId,
-        createdAt: action.payload.createdAt,
-        patient: action.payload.patient,
-        ballShape: action.payload.ballShape,
-        direction: action.payload.direction,
-        ballSpeed: action.payload.ballSpeed,
-        isActive: action.payload.isActive,
-        hasBallStarted: action.payload.hasBallStarted,
-        drName: action.payload.drName,
-        isSoundPlaying: action.payload.isSoundPlaying,
-        sound: 'off',
-      };
-    case GET_SESSION_INFO_NOSOUND_ERROR:
-      return {
-        ...state,
-        getSessionLoading: false,
-        getSessionError: action.payload,
-        getSessionLoaded: false,
-      };
-    case DELETE_SESSION_START:
-      return {
-        ...state,
-        sessionDeleteLoading: true,
-        sessionDeleteLoaded: false,
-        sessionDeleteError: null,
-      };
-    case DELETE_SESSION_DONE:
-      return {
-        ...state,
-        sessionDeleteLoading: false,
-        sessionDeleteLoaded: true,
-        sessionDeleteError: null,
-      };
-    case DELETE_SESSION_ERROR:
-      return {
-        ...state,
-        sessionDeleteLoading: false,
-        sessionDeleteLoaded: false,
-        sessionDeleteError: action.payload,
-      };
-      case UPDATE_SESSION_WITH_SOCKET_START:
-      return {
-        ...state,
-        updating: true
-      };
-      case UPDATE_SESSION_WITH_SOCKET_DONE:
+    case UPDATE_SESSION_WITH_SOCKET_DONE:
       return {
         ...state,
         updating: false,
@@ -188,13 +236,14 @@ const sessionReducer = (state = initialState, action) => {
         updateError: null,
         ...action.payload,
       };
-      case UPDATE_SESSION_WITH_SOCKET_ERROR:
+    case UPDATE_SESSION_WITH_SOCKET_ERROR:
       return {
         ...state,
         updating: false,
         updated: false,
         updateError: action.payload,
       };
+
     default:
       return state;
   }

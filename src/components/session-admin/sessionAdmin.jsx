@@ -4,7 +4,8 @@ import { useRouteMatch } from "react-router-dom";
 import { Pause, Play } from "react-feather";
 import {
   updateSession,
-  getSessionInfoWithNoSound,
+  getSessionInfo,
+  updateBallSpeed,
 } from "../../actions/sessionActions";
 import { Session } from "../session/Session";
 import {
@@ -18,9 +19,8 @@ import {
 import copy from "copy-to-clipboard";
 import { Helmet } from "react-helmet";
 import { useRef } from "react";
-import Nouislider from 'nouislider-react'
+import Nouislider from "nouislider-react";
 import "nouislider/distribute/nouislider.css";
-
 
 export const SessionAdmin = () => {
   let match = useRouteMatch();
@@ -31,11 +31,12 @@ export const SessionAdmin = () => {
 
   // ComponentDidMount
   useEffect(() => {
-    dispatch(getSessionInfoWithNoSound(sessionId));
+    dispatch(getSessionInfo(sessionId, true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { ballShape, ballSpeed, isActive } = useSelector((state) => ({
+  const { ballShape, ballSpeed, isActive, ballSpeedUpdateLoaded } = useSelector((state) => ({
+    ballSpeedUpdateLoaded: state.currentSession.ballSpeedUpdateLoaded,
     ballShape: state.currentSession.ballShape,
     direction: state.currentSession.direction,
     ballSpeed: state.currentSession.ballSpeed,
@@ -64,37 +65,38 @@ export const SessionAdmin = () => {
 
   const handleSpeed = (sliderSpeed) => {
     setSpeed(parseInt(sliderSpeed));
-    
   };
-
 
   const startStopToggle = () => {
     // console.log(isActive);
-    dispatch(
-      updateSession({ isActive: !isActive, _id: id }, sessionId)
-    )
-  }
+    dispatch(updateSession({ isActive: !isActive, _id: id }, sessionId));
+  };
 
   /**
    * Slider ın değerine göre otomatik hızı uyguluyor ama şu an çok fazla request atıyor ve sayfa
-   * yenilenince animasyonu başlatıyor. 
+   * yenilenince animasyonu başlatıyor.
    */
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      dispatch(updateSession({ isActive: false, _id: id }, sessionId));
+    if (id) {
+      console.log(id);
       dispatch(
-        updateSession(
-          { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
-          sessionId
-        )
+        updateBallSpeed({ ballSpeed: speedOfBallRef.current, isActive: true, _id: id }, sessionId)
       );
-    }, 2000);
-    return () => clearTimeout(timeout);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
+    // const timeout = setTimeout(() => {
+    //   dispatch(updateSession({ isActive: false, _id: id }, sessionId));
+    //   dispatch(
+    //     updateSession(
+    //       { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
+    //       sessionId
+    //     )
+    //   );
+    // }, 2000);
+    // return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speedOfBall]);
 
   const handleSound = (e) => {
-
     dispatch(updateSession({ sound: e.target.value, _id: id }, sessionId));
   };
 
@@ -172,7 +174,14 @@ export const SessionAdmin = () => {
           <div className="ml-2 mt-3">
             <div className="mt-2 mb-1">{`HIZI AYARLA [${speedOfBall}]`}</div>
             <div>
-                <Nouislider range={{min: 1, max: 9 }} tooltips={[false]} start={speedOfBall} connect step={1} onEnd={(sliderSpeed) => handleSpeed(sliderSpeed)} />
+              <Nouislider
+                range={{ min: 1, max: 9 }}
+                tooltips={[false]}
+                start={speedOfBall}
+                connect
+                step={1}
+                onEnd={(sliderSpeed) => handleSpeed(sliderSpeed)}
+              />
             </div>
             {/* HIZ AYARI SON */}
             {/* ŞEKLİ AYARLA */}

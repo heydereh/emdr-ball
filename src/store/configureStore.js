@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
+import { middleware as reduxPackMiddleware } from 'redux-pack'
 import rootReducer from '../reducers/rootReducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
@@ -10,7 +11,7 @@ import logger from 'redux-logger';
  */
 export const configureStore = () => {
 
-    const middlewares = [thunk, logger];
+    const middlewares = [thunk, reduxPackMiddleware, logger];
 
     const middlewareEnhancer = applyMiddleware(...middlewares);
 
@@ -22,6 +23,5 @@ export const configureStore = () => {
         rootReducer,
         composedEnhancer,
     )
-
     return store;
 }
