@@ -24,7 +24,6 @@ import useNoSleep from "use-no-sleep";
 
 export const AdminBall = (props) => {
   let match = useRouteMatch();
-  // console.log(props);
   const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
 
   const dispatch = useDispatch();
@@ -38,7 +37,6 @@ export const AdminBall = (props) => {
     sound,
     _id,
   } = props
-  // console.log(ballSpeed);
 
   const keyframesStyle = `
     @keyframes mymoveSession {
@@ -52,7 +50,6 @@ export const AdminBall = (props) => {
 
   // ComponentDidMount
   useEffect(() => {
-    // console.log(socket);
     if (_id) {
 
       socket.on(_id, (data) => {
@@ -92,17 +89,11 @@ export const AdminBall = (props) => {
   useEffect(() => {
     if (Cookies.get('allowSound') === true) {
       if (play === false) {
-        console.log("COOKIE DEN SETPLAY");
         
         setPlay(true)
       }
     }
   })
-
-//   const handleSound = () => {
-//     Cookies.set('allowSound', !play)
-//     setPlay(!play);
-//   };
 
   useEffect(() => {
     if (play && (sound !== 'off')) {
@@ -159,7 +150,6 @@ export const AdminBall = (props) => {
 
   // window size for add container class for widescreen
   const size = useWindowSize();
-  // console.log(size);
 
   const [screen, setScreenAwake] = useState(false)
   useNoSleep(screen)
@@ -209,7 +199,6 @@ export const AdminBall = (props) => {
         timeout={(speedArray[ballSpeed] * 1000) / 2}
         enabled={(sound !== 'off' && isActive) ? true : false}
         callback={() => {
-          // console.log((speedArray[ballSpeed] * 1000) / 2);
           playSound();
         }}
       />

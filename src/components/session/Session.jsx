@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import {
-  getSessionInfo,
+  getSessionInfoFromSession,
   updateSessionWithSocket,
 } from "../../actions/sessionActions";
 import injectStyle from "../../helpers/incejctStyle";
@@ -24,7 +24,6 @@ import useNoSleep from "use-no-sleep";
 
 export const Session = (props) => {
   let match = useRouteMatch();
-  // console.log(props);
   const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
 
   const dispatch = useDispatch();
@@ -39,7 +38,6 @@ export const Session = (props) => {
     sound,
     _id,
   } = useSelector((state) => {
-    // console.log(state);
     return {
       patient: state.currentSession.patient,
       drName: state.currentSession.drName,
@@ -51,7 +49,6 @@ export const Session = (props) => {
       sound: state.currentSession.sound,
     };
   });
-  // console.log(ballSpeed);
 
   const keyframesStyle = `
     @keyframes mymoveSession {
@@ -63,13 +60,9 @@ export const Session = (props) => {
   // Keyframes inject
   injectStyle(keyframesStyle);
 
-  // socket.on("disconnect", () => {
-  //   // console.log("socket bağlantısı " + socket.connected);
-  // });
 
   // ComponentDidMount
   useEffect(() => {
-    // console.log(socket);
     if (_id) {
 
       socket.on(_id, (data) => {
@@ -77,10 +70,11 @@ export const Session = (props) => {
           dispatch(updateSessionWithSocket(data));
         }
         socket.on('disconnect', () => console.log("socket disconnect"))
+        return;
       });
     }
-
-    dispatch(getSessionInfo(match.params.sessionId));
+    
+    dispatch(getSessionInfoFromSession(match.params.sessionId));
 
     return () => {
       socket.close();
@@ -113,7 +107,6 @@ export const Session = (props) => {
   useEffect(() => {
     if (Cookies.get('allowSound') === true) {
       if (play === false) {
-        console.log("COOKIE DEN SETPLAY");
         
         setPlay(true)
       }
@@ -126,8 +119,6 @@ export const Session = (props) => {
   };
 
   useEffect(() => {
-    // console.log("PLAY IN EFFECT : " + play);
-    // console.log("sound " + sound);
     if (play && (sound !== 'off')) {
       playSound();
     }
@@ -220,7 +211,6 @@ export const Session = (props) => {
 
   // window size for add container class for widescreen
   const size = useWindowSize();
-  // console.log(size);
 
   const [screen, setScreenAwake] = useState(false)
   useNoSleep(screen)
@@ -284,7 +274,6 @@ export const Session = (props) => {
         timeout={(speedArray[ballSpeed] * 1000) / 2}
         enabled={!props.admin ? (isActive && (sound !== 'off') && play) ? true : false : (isActive && (sound !== 'off')) ? true : false }
         callback={() => {
-          // console.log((speedArray[ballSpeed] * 1000) / 2);
           playSound();
         }}
       />

@@ -59,7 +59,6 @@ export const SessionAdmin = () => {
     startStopLoaded: state.currentSession.startStopLoaded,
     startStopError: state.currentSession.startStopError,
   }));
-  console.log(isActive);
   
   /**
    * Burada saçma işler döndü ben de tam anlamadım özetle
@@ -81,7 +80,6 @@ export const SessionAdmin = () => {
   };
 
   const startStopToggle = () => {
-    // console.log(isActive);
     dispatch(startStopAction({ isActive: !isActive, _id: id }, sessionId));
   };
 
@@ -91,7 +89,6 @@ export const SessionAdmin = () => {
    */
   useEffect(() => {
     if (id) {
-      console.log(id);
       dispatch(
         updateBallSpeed(
           { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },

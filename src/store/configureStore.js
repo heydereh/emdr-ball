@@ -4,6 +4,7 @@ import rootReducer from '../reducers/rootReducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import cancelAction from './cancelActionMiddleware';
 
 /**
  * 
@@ -11,7 +12,7 @@ import logger from 'redux-logger';
  */
 export const configureStore = () => {
 
-    const middlewares = [thunk, reduxPackMiddleware, logger];
+    const middlewares = [thunk, reduxPackMiddleware, logger ];
 
     const middlewareEnhancer = applyMiddleware(...middlewares);
 

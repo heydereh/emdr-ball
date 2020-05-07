@@ -10,6 +10,7 @@ import {
   START_STOP_ACTION,
   SET_SOUND_ACTION,
   SET_SHAPE_ACTION,
+  GET_SESSION_INFO_FROM_SESSION,
 } from "../actions/actionConstants";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -70,6 +71,15 @@ export const getSessionInfo = (sessionId) => {
   return {
     type: GET_SESSION_INFO,
     promise: promise
+  };
+
+};
+export const getSessionInfoFromSession = (sessionId) => {
+  console.log("GET SESSION ACTION");
+                  
+  return {
+    type: GET_SESSION_INFO_FROM_SESSION,
+    promise: axios.get(`${SERVER_URL}/api/v1/sessions/${sessionId}`)
   };
 
 };

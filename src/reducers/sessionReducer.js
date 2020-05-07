@@ -3,6 +3,7 @@ import {
   UPDATE_SESSION_WITH_SOCKET_DONE,
   UPDATE_SESSION_WITH_SOCKET_ERROR,
   GET_SESSION_INFO,
+  GET_SESSION_INFO_FROM_SESSION,
   SESSION_CREATE,
   UPDATE_BALL_SPEED,
   START_STOP_ACTION,
@@ -146,6 +147,51 @@ const sessionReducer = (state = initialState, action) => {
         },
       }); */
     case GET_SESSION_INFO:
+      return handle(state, action, {
+        start: (prevState) => ({
+          ...prevState,
+          getSessionLoading: false,
+          getSessionError: null,
+          getSessionLoaded: false,
+        }),
+        success: (prevState) => {
+          return {
+            ...prevState,
+            getSessionLoaded: true,
+            _id: action.payload.data.data._id,
+            getSessionLoading: false,
+            sessionId: action.payload.data.data.sessionId,
+            createdAt: action.payload.data.data.createdAt,
+            patient: action.payload.data.data.patient,
+            ballShape: action.payload.data.data.ballShape,
+            direction: action.payload.data.data.direction,
+            ballSpeed: action.payload.data.data.ballSpeed,
+            isActive: action.payload.data.data.isActive,
+            hasBallStarted: action.payload.data.data.hasBallStarted,
+            drName: action.payload.data.data.drName,
+            isSoundPlaying: action.payload.data.data.isSoundPlaying,
+            sound: action.payload.data.data.sound,
+          };
+        },
+        failure: (prevState) => {
+          return {
+            ...prevState,
+            getSessionLoading: false,
+            getSessionError:
+              (action.payload &&
+                action.payload.response &&
+                action.payload.response.data &
+                  action.payload.response.data.error &&
+                action.payload.response.data.error) ||
+              "baglanti hatasi",
+            getSessionLoaded: false,
+          };
+        },
+        finish: (prevState) => ({
+          ...prevState,
+        }),
+      });
+      case GET_SESSION_INFO_FROM_SESSION:
       return handle(state, action, {
         start: (prevState) => ({
           ...prevState,
