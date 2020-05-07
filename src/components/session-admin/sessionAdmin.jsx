@@ -3,11 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import { Pause, Play } from "react-feather";
 import {
-  updateSession,
   getSessionInfo,
   updateBallSpeed,
+  startStopAction,
+  setSoundAction,
+  setShapeAction,
 } from "../../actions/sessionActions";
 import { Session } from "../session/Session";
+import { AdminBall } from "./adminBall";
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -31,22 +34,33 @@ export const SessionAdmin = () => {
 
   // ComponentDidMount
   useEffect(() => {
-    dispatch(getSessionInfo(sessionId, true));
+    dispatch(getSessionInfo(sessionId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { ballShape, ballSpeed, isActive, ballSpeedUpdateLoaded } = useSelector((state) => ({
-    ballSpeedUpdateLoaded: state.currentSession.ballSpeedUpdateLoaded,
+  const {
+    id,
+    sound,
+    isActive,
+    ballShape,
+    ballSpeed,
+    patient,
+    startStopLoading,
+    startStopLoaded,
+    startStopError,
+  } = useSelector((state) => ({
+    patient: state.currentSession.patient,
     ballShape: state.currentSession.ballShape,
-    direction: state.currentSession.direction,
     ballSpeed: state.currentSession.ballSpeed,
-    isSoundPlaying: state.currentSession.isSoundPlaying,
     isActive: state.currentSession.isActive,
+    id: state.currentSession._id,
+    sound: state.currentSession.sound,
+    startStopLoading: state.currentSession.startStopLoading,
+    startStopLoaded: state.currentSession.startStopLoaded,
+    startStopError: state.currentSession.startStopError,
   }));
-  // bunu yukarıdaki gruba ekleyince alamadı bi türlü
-  const id = useSelector((state) => state.currentSession._id);
-  // console.log("sound " + sound + " " + isSoundPlaying);
-
+  console.log(isActive);
+  
   /**
    * Burada saçma işler döndü ben de tam anlamadım özetle
    * storedaki data ile state i güncelleme yapıldı
@@ -56,8 +70,7 @@ export const SessionAdmin = () => {
   const [speedOfBall, setSpeed] = useState(ballSpeed);
   const speedOfBallRef = useRef(speedOfBall);
   speedOfBallRef.current = speedOfBall;
-  // bunu page kapanınca tekrar update edeceğim için ayrı aldım
-  const sound = useSelector((state) => state.currentSession.sound);
+
   // ShouldComponentMount
   useEffect(() => {
     setSpeed(ballSpeed);
@@ -69,7 +82,7 @@ export const SessionAdmin = () => {
 
   const startStopToggle = () => {
     // console.log(isActive);
-    dispatch(updateSession({ isActive: !isActive, _id: id }, sessionId));
+    dispatch(startStopAction({ isActive: !isActive, _id: id }, sessionId));
   };
 
   /**
@@ -80,24 +93,16 @@ export const SessionAdmin = () => {
     if (id) {
       console.log(id);
       dispatch(
-        updateBallSpeed({ ballSpeed: speedOfBallRef.current, isActive: true, _id: id }, sessionId)
+        updateBallSpeed(
+          { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
+          sessionId
+        )
       );
     }
-    // const timeout = setTimeout(() => {
-    //   dispatch(updateSession({ isActive: false, _id: id }, sessionId));
-    //   dispatch(
-    //     updateSession(
-    //       { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
-    //       sessionId
-    //     )
-    //   );
-    // }, 2000);
-    // return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speedOfBall]);
 
   const handleSound = (e) => {
-    dispatch(updateSession({ sound: e.target.value, _id: id }, sessionId));
+    dispatch(setSoundAction({ sound: e.target.value, _id: id }, sessionId));
   };
 
   const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState(
@@ -170,6 +175,19 @@ export const SessionAdmin = () => {
               <WhatsappIcon size={32} />
             </WhatsappShareButton>
           </div>
+          {/* Start/Stop */}
+          <div className="row mt-3 btn-group d-flex">
+            <button
+              type="button"
+              className="btn btn-lg btn-outline-info btn-sm col-sm mb-2"
+              onClick={startStopToggle}
+              disabled={startStopLoading ? true : false}
+            >
+              <span>{isActive ? <Pause size={20} /> : <Play size={20} />}</span>
+              {`${isActive ? "Duraklat" : "Başlat"}`}
+            </button>
+          </div>
+          {/* Start/Stop Ends */}
           {/* HIZ AYARI  */}
           <div className="ml-2 mt-3">
             <div className="mt-2 mb-1">{`HIZI AYARLA [${speedOfBall}]`}</div>
@@ -191,7 +209,7 @@ export const SessionAdmin = () => {
               id="shapeRadioGroup"
               onChange={(e) =>
                 dispatch(
-                  updateSession(
+                  setShapeAction(
                     { ballShape: e.target.value, _id: id },
                     sessionId
                   )
@@ -336,18 +354,6 @@ export const SessionAdmin = () => {
               </div>
             </div>{" "}
             {/** sound radio group end */}
-            <div className="row mt-3 mb-2 mr-2 btn-group d-flex">
-              <button
-                type="button"
-                className="btn btn-outline-info btn-sm col-sm mb-2"
-                onClick={startStopToggle}
-              >
-                <span>
-                  {isActive ? <Pause size={20} /> : <Play size={20} />}
-                </span>
-                {`${isActive ? "Duraklat" : "Başlat"}`}
-              </button>
-            </div>
           </div>
         </div>
         {/* SAĞ TARAF */}
@@ -355,7 +361,14 @@ export const SessionAdmin = () => {
           className="col-8 border border-dark"
           style={{ maxHeight: "100vh", overflowY: "unset" }}
         >
-          <Session admin={true} />
+          <AdminBall
+            patient={patient}
+            ballShape={ballShape}
+            ballSpeed={ballSpeed}
+            isActive={isActive}
+            sound={sound}
+            _id={id}
+          />
         </div>
       </div>
     </div>

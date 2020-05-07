@@ -5,6 +5,7 @@ import {
   GET_SESSION_INFO,
   SESSION_CREATE,
   UPDATE_BALL_SPEED,
+  START_STOP_ACTION,
 } from "../actions/actionConstants";
 import { handle } from "redux-pack";
 
@@ -34,6 +35,9 @@ const initialState = {
   ballSpeedUpdateLoading: false,
   ballSpeedUpdateLoaded: false,
   ballSpeedUpdateError: null,
+  startStopLoading: false,
+  startStopLoaded: false,
+  startStopError: null,
 };
 
 const sessionReducer = (state = initialState, action) => {
@@ -201,7 +205,7 @@ const sessionReducer = (state = initialState, action) => {
           };
         },
         success: (prevState) => {
-          console.log("SPEED SUCCESS");
+          // console.log("SPEED SUCCESS");
 
           return {
             ...prevState,
@@ -214,15 +218,24 @@ const sessionReducer = (state = initialState, action) => {
 
           return {
             ...prevState,
-            ballSpeedUpdateError: (action.payload &&
-              action.payload.response &&
-              action.payload.response.data &
-                action.payload.response.data.error &&
-              action.payload.response.data.error) ||
-            "baglanti hatasi",
+            ballSpeedUpdateError:
+              (action.payload &&
+                action.payload.response &&
+                action.payload.response.data &
+                  action.payload.response.data.error &&
+                action.payload.response.data.error) ||
+              "baglanti hatasi",
           };
         },
       });
+    case START_STOP_ACTION:
+      return handle(state, action, {
+        start: (prevState) => { return {...prevState, startStopLoading: true,
+          startStopLoaded: false,
+          startStopError: null,}},
+        success: (prevState) => { return {...prevState, startStopLoading: false, startStopLoaded: true, startStopError: null}},
+        failure: (prevState) => { return {...prevState, startStopLoading: false, startStopError: "Bağlantı Hatası"}},
+      })
     case UPDATE_SESSION_WITH_SOCKET_START:
       return {
         ...state,

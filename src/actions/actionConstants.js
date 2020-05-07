@@ -38,6 +38,9 @@ export const DELETE_SESSION_DONE = "DELETE_SESSION_DONE"
 export const DELETE_SESSION_ERROR = "DELETE_SESSION_ERROR"
 
 export const UPDATE_BALL_SPEED = "UPDATE_BALL_SPEED"
+export const START_STOP_ACTION = "START_STOP_ACTION"
+export const SET_SOUND_ACTION = "SET_SOUND_ACTION"
+export const SET_SHAPE_ACTION = "SET_SHAPE_ACTION"
 
 // export const SERVER_URL = "http://3.123.80.140"
 export const SERVER_URL = "http://localhost:5050"

@@ -7,11 +7,15 @@ import {
   UPDATE_SESSION_WITH_SOCKET_DONE,
   UPDATE_SESSION_WITH_SOCKET_ERROR,
   SERVER_URL,
+  START_STOP_ACTION,
+  SET_SOUND_ACTION,
+  SET_SHAPE_ACTION,
 } from "../actions/actionConstants";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 export const updateSessionWithSocket = (options) => {
+  
   return async (dispatch) => {
     // console.log(options);
 
@@ -36,7 +40,7 @@ export const createSession = (options) => {
   const newSessionId = Date.now();
   options.sessionId = newSessionId;
   // console.log(options);
-
+  
   return {
     type: SESSION_CREATE,
     promise: axios.post(`${SERVER_URL}/api/v1/sessions`, options),
@@ -56,32 +60,16 @@ export const createSession = (options) => {
 
 };
 
-export const getSessionInfo = (sessionId, noSound) => {
+export const getSessionInfo = (sessionId) => {
   console.log("GET SESSION ACTION");
-  let meta = null;
-
-  if (noSound) {
-    meta = {
-      onSuccess: (result, getState) => {
-        updateSession(
-          { sound: "off",isActive: false, _id: result.data.data._id },
-          sessionId
-        );
-      },
-      // TODO  surekli ayni action ı kullanmak hatalı ileride iptal ettiğimde içeriğine bakmadan tümünü iptal edebilir. Farklı action lar oluştur.
-      // onFinish: (result, getState) => {
-      //   updateSession(
-      //     { sound: "off",isActive: false, _id: result.data.data._id },
-      //     sessionId
-      //   );
-      // }
-    };
-  }
-
+  const promise = axios.get(`${SERVER_URL}/api/v1/sessions/${sessionId}`)
+                  .then(sessionResponse => {
+                    console.log(sessionResponse);
+                    return axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, { isActive: false, _id: sessionResponse.data.data._id })
+                  }).catch(err => console.log(err))
   return {
     type: GET_SESSION_INFO,
-    promise: axios.get(`${SERVER_URL}/api/v1/sessions/${sessionId}`),
-    meta: meta,
+    promise: promise
   };
 
 };
@@ -93,6 +81,26 @@ export const updateSession = (options, sessionId) => {
     promise: axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, options),
   };
 
+};
+
+export const startStopAction = (options, sessionId) => {
+  return {
+    type: START_STOP_ACTION,
+    promise: axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, options),
+  };
+
+};
+export const setSoundAction = (options, sessionId) => {
+  return {
+    type: SET_SOUND_ACTION,
+    promise: axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, options),
+  };
+};
+export const setShapeAction = (options, sessionId) => {
+  return {
+    type: SET_SHAPE_ACTION,
+    promise: axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, options),
+  };
 };
 
 export const updateBallSpeed = (options, sessionId) => {
