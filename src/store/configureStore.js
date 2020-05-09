@@ -3,13 +3,13 @@ import { middleware as reduxPackMiddleware } from 'redux-pack'
 import rootReducer from '../reducers/rootReducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 // import cancelAction from './cancelActionMiddleware'; 
 
 export const configureStore = () => {
 
 
-    const middlewares = [thunk, reduxPackMiddleware, logger ];
+    const middlewares = [thunk, reduxPackMiddleware ];
 
     const middlewareEnhancer = applyMiddleware(...middlewares);
 
