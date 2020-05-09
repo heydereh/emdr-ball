@@ -16,11 +16,9 @@ import { SERVER_URL_SOCKET } from "../../actions/actionConstants";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 // eslint-disable-next-line no-unused-vars
-import {Howl, Howler} from 'howler';
-import Cookies from 'js-cookie'
+import { Howl, Howler } from "howler";
+import Cookies from "js-cookie";
 import useNoSleep from "use-no-sleep";
-
-
 
 export const Session = (props) => {
   let match = useRouteMatch();
@@ -42,7 +40,6 @@ export const Session = (props) => {
       patient: state.currentSession.patient,
       drName: state.currentSession.drName,
       ballShape: state.currentSession.ballShape,
-      direction: state.currentSession.direction,
       ballSpeed: state.currentSession.ballSpeed,
       isActive: state.currentSession.isActive,
       _id: state.currentSession._id,
@@ -60,20 +57,18 @@ export const Session = (props) => {
   // Keyframes inject
   injectStyle(keyframesStyle);
 
-
   // ComponentDidMount
   useEffect(() => {
     if (_id) {
-
       socket.on(_id, (data) => {
         if (data) {
           dispatch(updateSessionWithSocket(data));
         }
-        socket.on('disconnect', () => console.log("socket disconnect"))
+        socket.on("disconnect", () => console.log("socket disconnect"));
         return;
       });
     }
-    
+
     dispatch(getSessionInfoFromSession(match.params.sessionId));
 
     return () => {
@@ -90,9 +85,10 @@ export const Session = (props) => {
   };
 
   const soundToPlay = new Howl({
-    src: sound === 'drip' ? `${process.env.PUBLIC_URL}/drip.mp3` : `${process.env.PUBLIC_URL}/drop.mp3`,
-    
-
+    src:
+      sound === "drip"
+        ? `${process.env.PUBLIC_URL}/drip.mp3`
+        : `${process.env.PUBLIC_URL}/drop.mp3`,
   });
 
   const playSound = () => {
@@ -102,27 +98,26 @@ export const Session = (props) => {
     soundToPlay.pause();
   };
 
-  const [play, setPlay] = useState(Cookies.get('allowSound') || false);
+  const [play, setPlay] = useState(Cookies.get("allowSound") || false);
 
   useEffect(() => {
-    if (Cookies.get('allowSound') === true) {
+    if (Cookies.get("allowSound") === true) {
       if (play === false) {
-        
-        setPlay(true)
+        setPlay(true);
       }
     }
-  })
+  });
 
   const handleSound = () => {
-    Cookies.set('allowSound', !play)
+    Cookies.set("allowSound", !play);
     setPlay(!play);
   };
 
   useEffect(() => {
-    if (play && (sound !== 'off')) {
+    if (play && sound !== "off") {
       playSound();
     }
-    if (!play || (sound !== 'off')) {
+    if (!play || sound !== "off") {
       pauseSound();
     }
   }, [play, sound]);
@@ -212,8 +207,8 @@ export const Session = (props) => {
   // window size for add container class for widescreen
   const size = useWindowSize();
 
-  const [screen, setScreenAwake] = useState(false)
-  useNoSleep(screen)
+  const [screen, setScreenAwake] = useState(false);
+  useNoSleep(screen);
   return (
     <div
       className={`${size.width > 999 ? "container" : ""}`}
@@ -268,11 +263,22 @@ export const Session = (props) => {
         )}
       </div>
       <div className="pt-4 pl-1 pr-4" style={style.container}>
+        {patient ? null : <div class="alert alert-danger" role="alert">
+          SEANS BULUNAMADI
+        </div>}
         <div className="mt-4" style={shape.get(`${ballShape}`)}></div>
       </div>
       <ReactInterval
         timeout={(speedArray[ballSpeed] * 1000) / 2}
-        enabled={!props.admin ? (isActive && (sound !== 'off') && play) ? true : false : (isActive && (sound !== 'off')) ? true : false }
+        enabled={
+          !props.admin
+            ? isActive && sound !== "off" && play
+              ? true
+              : false
+            : isActive && sound !== "off"
+            ? true
+            : false
+        }
         callback={() => {
           playSound();
         }}

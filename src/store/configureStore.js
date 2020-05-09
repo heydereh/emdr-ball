@@ -4,13 +4,10 @@ import rootReducer from '../reducers/rootReducer';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import cancelAction from './cancelActionMiddleware';
+// import cancelAction from './cancelActionMiddleware'; 
 
-/**
- * 
- * preloadedState = localStorage etc.
- */
 export const configureStore = () => {
+
 
     const middlewares = [thunk, reduxPackMiddleware, logger ];
 

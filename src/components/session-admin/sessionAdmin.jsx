@@ -91,7 +91,7 @@ export const SessionAdmin = () => {
     if (id) {
       dispatch(
         updateBallSpeed(
-          { ballSpeed: speedOfBallRef.current, isActive: true, _id: id },
+          { ballSpeed: speedOfBallRef.current, isActive: isActive ? true : false, _id: id },
           sessionId
         )
       );
@@ -99,7 +99,7 @@ export const SessionAdmin = () => {
   }, [speedOfBall]);
 
   const handleSound = (e) => {
-    dispatch(setSoundAction({ sound: e.target.value, _id: id }, sessionId));
+    dispatch(setSoundAction({ sound: e.target.value, isActive: isActive ? true : false, _id: id }, sessionId));
   };
 
   const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState(

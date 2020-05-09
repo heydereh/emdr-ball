@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import {
   getSessionInfo,
@@ -193,6 +193,9 @@ export const AdminBall = (props) => {
 
       </div>
       <div className="pt-4 pl-1 pr-4" style={style.container}>
+      {patient ? null : <div className="alert alert-danger" role="alert">
+          SEANS BULUNAMADI
+        </div>}
         <div className="mt-4" style={shape.get(`${ballShape}`)}></div>
       </div>
       <ReactInterval

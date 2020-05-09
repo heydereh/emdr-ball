@@ -42,7 +42,7 @@ const initialState = {
 };
 
 const sessionReducer = (state = initialState, action) => {
-  console.log(action);
+  // console.log(action);
 
   switch (action.type) {
     case SESSION_CREATE:
@@ -155,23 +155,23 @@ const sessionReducer = (state = initialState, action) => {
           getSessionLoaded: false,
         }),
         success: (prevState) => {
-          return {
-            ...prevState,
-            getSessionLoaded: true,
-            _id: action.payload.data.data._id,
-            getSessionLoading: false,
-            sessionId: action.payload.data.data.sessionId,
-            createdAt: action.payload.data.data.createdAt,
-            patient: action.payload.data.data.patient,
-            ballShape: action.payload.data.data.ballShape,
-            direction: action.payload.data.data.direction,
-            ballSpeed: action.payload.data.data.ballSpeed,
-            isActive: action.payload.data.data.isActive,
-            hasBallStarted: action.payload.data.data.hasBallStarted,
-            drName: action.payload.data.data.drName,
-            isSoundPlaying: action.payload.data.data.isSoundPlaying,
-            sound: action.payload.data.data.sound,
-          };
+            return {
+              ...prevState,
+              getSessionLoaded: true,
+              _id: action.payload.data.data._id,
+              getSessionLoading: false,
+              sessionId: action.payload.data.data.sessionId,
+              createdAt: action.payload.data.data.createdAt,
+              patient: action.payload.data.data.patient,
+              ballShape: action.payload.data.data.ballShape,
+              direction: action.payload.data.data.direction,
+              ballSpeed: action.payload.data.data.ballSpeed,
+              isActive: action.payload.data.data.isActive,
+              hasBallStarted: action.payload.data.data.hasBallStarted,
+              drName: action.payload.data.data.drName,
+              isSoundPlaying: action.payload.data.data.isSoundPlaying,
+              sound: action.payload.data.data.sound,
+            };
         },
         failure: (prevState) => {
           return {
@@ -237,11 +237,8 @@ const sessionReducer = (state = initialState, action) => {
         }),
       });
     case UPDATE_BALL_SPEED:
-      console.log(state);
-      console.log(action);
       return handle(state, action, {
         start: (prevState) => {
-          console.log("SPEED START");
 
           return {
             ...prevState,
@@ -251,7 +248,6 @@ const sessionReducer = (state = initialState, action) => {
           };
         },
         success: (prevState) => {
-          // console.log("SPEED SUCCESS");
 
           return {
             ...prevState,
@@ -260,7 +256,6 @@ const sessionReducer = (state = initialState, action) => {
           };
         },
         failure: (prevState) => {
-          console.log("SPEED FAILURE");
 
           return {
             ...prevState,

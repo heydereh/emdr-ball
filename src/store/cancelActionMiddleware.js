@@ -1,59 +1,63 @@
 const actions = {};
 
-const setAction = action => {
-    action[action.type] = {
-        phase: action.meta["redux-pack/LIFECYCLE"],
-        transactionId: action.meta["redux-pack/TANSACTION"]
-    };
+const setAction = (action) => {
+  actions[action.type] = {
+    phase: action.meta["redux-pack/LIFECYCLE"],
+    transactionId: action.meta["redux-pack/TANSACTION"],
+  };
 };
 
-const getAction = action => actions[action.type];
+const getAction = (action) => actions[action.type];
 
-const isStartAction = action => action.meta["redux-pack/LIFECYCLE"] === "start";
-
-const isSuccessAction = action =>
-    action.meta["redux-pack/LIFECYCLE"] === "success";
-
-const isStaleAction = newAction => {
-    const oldAction = getAction(newAction);
-    return (
-        oldAction && 
-        oldAction.transactionId !== newAction.meta["redux-pack/TRANSACTION"]
-    );
+const isStartAction = (action) => {
+  return action.meta["redux-pack/LIFECYCLE"] === "start";
 };
 
-const isActionPresentInStartPhase = newAction => {
-    const oldAction = getAction(newAction);
-    return oldAction && oldAction.meta["redux-pack/LIFECYCLE"] === "start";
+const isSuccessAction = (action) => {
+  return action.meta["redux-pack/LIFECYCLE"] === "success";
 };
 
-const isReduxPackAction = action => 
-    action && Object.keys(action).includes("meta");
+const isStaleAction = (newAction) => {
+  const oldAction = getAction(newAction);
+  return (
+    oldAction &&
+    oldAction.transactionId !== newAction.meta["redux-pack/TRANSACTION"]
+  );
+};
 
- const cancelAction = () => next => action => {
-    if (isReduxPackAction(action)) {
-        if (isStartAction(action)) {
-            if (isStaleAction(action)) delete actions[action.type];
-            setAction(action);
-            next(action); 
-        } else if (isSuccessAction(action)) {
-            if (isActionPresentInStartPhase(action)) {
-                if (isStaleAction(action)) {
-                    next({
-                        ...action,
-                        payload: null
-                    });
-                } else {
-                    delete actions[action.type];
-                    next(action);
-                }
-            } else {
-                next(action);
-            }
+const isActionPresentInStartPhase = (newAction) => {
+  const oldAction = getAction(newAction);
+  return oldAction && oldAction.phase === "start";
+};
+
+const isReduxPackAction = (action) => {
+  return action && Object.keys(action).includes("meta");
+};
+
+const cancelAction = (store) => (next) => (action) => {
+  if (isReduxPackAction(action)) {
+    if (isStartAction(action)) {
+      if (isStaleAction(action)) delete actions[action.type];
+      setAction(action);
+      next(action);
+    } else if (isSuccessAction(action)) {
+      if (isActionPresentInStartPhase(action)) {
+        if (isStaleAction(action)) {
+          next({
+            ...action,
+            payload: null,
+          });
+        } else {
+          delete actions[action.type];
+          next(action);
         }
-    } else {
+      } else {
         next(action);
+      }
     }
+  } else {
+    next(action);
+  }
 };
 
 export default cancelAction;

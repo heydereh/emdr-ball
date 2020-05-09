@@ -47,7 +47,6 @@ export const createSession = (options) => {
     promise: axios.post(`${SERVER_URL}/api/v1/sessions`, options),
     meta: {
       onSuccess: (result, getState) => {
-        console.log(result);
         
         const forCookie = JSON.stringify({
           patient: result.data.data.patient,
@@ -62,10 +61,10 @@ export const createSession = (options) => {
 };
 
 export const getSessionInfo = (sessionId) => {
-  console.log("GET SESSION ACTION");
+
+  // SESSION ILK CREATE OLDUGUNDA SIKINTI YOK AMA SAYFA YENILENDIGINDE SADECE SADECE PAUSE REQ GIDIYO GIBI -> reducerdaki if (action.data) yüzündenmiş
   const promise = axios.get(`${SERVER_URL}/api/v1/sessions/${sessionId}`)
                   .then(sessionResponse => {
-                    console.log(sessionResponse);
                     return axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, { isActive: false, _id: sessionResponse.data.data._id })
                   }).catch(err => console.log(err))
   return {
@@ -75,7 +74,6 @@ export const getSessionInfo = (sessionId) => {
 
 };
 export const getSessionInfoFromSession = (sessionId) => {
-  console.log("GET SESSION ACTION");
                   
   return {
     type: GET_SESSION_INFO_FROM_SESSION,
@@ -101,9 +99,14 @@ export const startStopAction = (options, sessionId) => {
 
 };
 export const setSoundAction = (options, sessionId) => {
+  const pauseAnimation = { isActive: false, _id: options._id };
+  const promise = axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, pauseAnimation)
+                  .then(pauseResponse => {
+                    return axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, options)
+                  }).catch(err => console.log(err))
   return {
     type: SET_SOUND_ACTION,
-    promise: axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, options),
+    promise
   };
 };
 export const setShapeAction = (options, sessionId) => {
@@ -114,7 +117,6 @@ export const setShapeAction = (options, sessionId) => {
 };
 
 export const updateBallSpeed = (options, sessionId) => {
-  console.log(options);
   
   const pauseAnimation = { isActive: false, _id: options._id };
   const promise = axios.put(`${SERVER_URL}/api/v1/sessions/${sessionId}`, pauseAnimation)
