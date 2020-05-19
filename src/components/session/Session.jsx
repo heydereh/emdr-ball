@@ -22,7 +22,18 @@ import useNoSleep from "use-no-sleep";
 
 export const Session = (props) => {
   let match = useRouteMatch();
-  const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
+  // const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
+  // useref e default null atıp sonra current a atama yapıp current a ulaşmaya çalışarak olmadı
+  const { current: socket } = useRef(socketIOClient(`${SERVER_URL_SOCKET}`));
+  // var socket2 = socketIOClient(`${SERVER_URL_SOCKET}`);
+
+  useEffect(() => {
+    dispatch(getSessionInfoFromSession(match.params.sessionId));
+    // socket.on(_id, (data) => {
+    //   console.log(data);
+
+    // })
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -57,9 +68,9 @@ export const Session = (props) => {
   // Keyframes inject
   injectStyle(keyframesStyle);
 
-  // ComponentDidMount
   useEffect(() => {
     if (_id) {
+      // console.log(socket);
       socket.on(_id, (data) => {
         if (data) {
           dispatch(updateSessionWithSocket(data));
@@ -69,11 +80,7 @@ export const Session = (props) => {
       });
     }
 
-    dispatch(getSessionInfoFromSession(match.params.sessionId));
-
-    return () => {
-      socket.close();
-    };
+    // dispatch(getSessionInfoFromSession(match.params.sessionId));
   }, [_id]);
 
   const speedArray = [0, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.8, 0.5];
@@ -263,9 +270,11 @@ export const Session = (props) => {
         )}
       </div>
       <div className="pt-4 pl-1 pr-4" style={style.container}>
-        {patient ? null : <div class="alert alert-danger" role="alert">
-          SEANS BULUNAMADI
-        </div>}
+        {patient ? null : (
+          <div className="alert alert-danger" role="alert">
+            SEANS BULUNAMADI
+          </div>
+        )}
         <div className="mt-4" style={shape.get(`${ballShape}`)}></div>
       </div>
       <ReactInterval
