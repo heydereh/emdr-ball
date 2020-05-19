@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import {
@@ -16,27 +16,25 @@ import { SERVER_URL_SOCKET } from "../../actions/actionConstants";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 // eslint-disable-next-line no-unused-vars
-import {Howl, Howler} from 'howler';
-import Cookies from 'js-cookie'
+import { Howl, Howler } from "howler";
+import Cookies from "js-cookie";
 import useNoSleep from "use-no-sleep";
-
-
 
 export const AdminBall = (props) => {
   let match = useRouteMatch();
-  const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
+  // const socket = socketIOClient(`${SERVER_URL_SOCKET}`);
+  // useref e default null atıp sonra current a atama yapıp current a ulaşmaya çalışarak olmadı
+  const { current: socket } = useRef(socketIOClient(`${SERVER_URL_SOCKET}`));
+
+  useEffect(() => {
+    dispatch(getSessionInfo(match.params.sessionId));
+
+  }, [])
 
   const dispatch = useDispatch();
 
   // mapStateToProps alternatifi hook
-  const {
-    patient,
-    ballShape,
-    ballSpeed,
-    isActive,
-    sound,
-    _id,
-  } = props
+  const { patient, ballShape, ballSpeed, isActive, sound, _id } = props;
 
   const keyframesStyle = `
     @keyframes mymoveSession {
@@ -48,21 +46,17 @@ export const AdminBall = (props) => {
   // Keyframes inject
   injectStyle(keyframesStyle);
 
-  // ComponentDidMount
+  console.log(socket);
+
   useEffect(() => {
     if (_id) {
-
       socket.on(_id, (data) => {
         if (data) {
           dispatch(updateSessionWithSocket(data));
         }
-        socket.on('disconnect', () => console.log("socket disconnect"))
+        socket.on("disconnect", () => console.log("socket disconnect"));
       });
     }
-    dispatch(getSessionInfo(match.params.sessionId));
-    return () => {
-      socket.close();
-    };
   }, [_id]);
 
   const speedArray = [0, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.8, 0.5];
@@ -74,7 +68,10 @@ export const AdminBall = (props) => {
   };
 
   const soundToPlay = new Howl({
-    src: sound === 'drip' ? `${process.env.PUBLIC_URL}/drip.mp3` : `${process.env.PUBLIC_URL}/drop.mp3`,
+    src:
+      sound === "drip"
+        ? `${process.env.PUBLIC_URL}/drip.mp3`
+        : `${process.env.PUBLIC_URL}/drop.mp3`,
   });
 
   const playSound = () => {
@@ -84,22 +81,21 @@ export const AdminBall = (props) => {
     soundToPlay.pause();
   };
 
-  const [play, setPlay] = useState(Cookies.get('allowSound') || false);
+  const [play, setPlay] = useState(Cookies.get("allowSound") || false);
 
   useEffect(() => {
-    if (Cookies.get('allowSound') === true) {
+    if (Cookies.get("allowSound") === true) {
       if (play === false) {
-        
-        setPlay(true)
+        setPlay(true);
       }
     }
-  })
+  });
 
   useEffect(() => {
-    if (play && (sound !== 'off')) {
+    if (play && sound !== "off") {
       playSound();
     }
-    if (!play || (sound !== 'off')) {
+    if (!play || sound !== "off") {
       pauseSound();
     }
   }, [play, sound]);
@@ -147,12 +143,11 @@ export const AdminBall = (props) => {
     animationTimingFunciton: "linear",
   });
 
-
   // window size for add container class for widescreen
   const size = useWindowSize();
 
-  const [screen, setScreenAwake] = useState(false)
-  useNoSleep(screen)
+  const [screen, setScreenAwake] = useState(false);
+  useNoSleep(screen);
   return (
     <div
       className={`${size.width > 999 ? "container" : ""}`}
@@ -168,16 +163,12 @@ export const AdminBall = (props) => {
           <meta name="keywords" content="emdr,terapi,top,göz,seans" />
         </Helmet>
       )}
-      <div
-        className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3"
-      >
+      <div className="border border-dark border-top-0 border-left-0 border-right-0 mb-1 mt-3">
         <div className="ml-3">
-      Danışan adı: <strong className="text-capitalize">{patient}.</strong>
-    </div>
+          Danışan adı: <strong className="text-capitalize">{patient}.</strong>
+        </div>
       </div>
       <div>
-
-          
         {!props.admin && (
           <div className="d-flex">
             <button
@@ -189,18 +180,18 @@ export const AdminBall = (props) => {
             </button>
           </div>
         )}
-
-
       </div>
       <div className="pt-4 pl-1 pr-4" style={style.container}>
-      {patient ? null : <div className="alert alert-danger" role="alert">
-          SEANS BULUNAMADI
-        </div>}
+        {patient ? null : (
+          <div className="alert alert-danger" role="alert">
+            SEANS BULUNAMADI
+          </div>
+        )}
         <div className="mt-4" style={shape.get(`${ballShape}`)}></div>
       </div>
       <ReactInterval
         timeout={(speedArray[ballSpeed] * 1000) / 2}
-        enabled={(sound !== 'off' && isActive) ? true : false}
+        enabled={sound !== "off" && isActive ? true : false}
         callback={() => {
           playSound();
         }}
