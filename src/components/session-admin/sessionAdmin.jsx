@@ -9,7 +9,6 @@ import {
   setSoundAction,
   setShapeAction,
 } from "../../actions/sessionActions";
-import { Session } from "../session/Session";
 import { AdminBall } from "./adminBall";
 import {
   EmailShareButton,
@@ -46,8 +45,6 @@ export const SessionAdmin = () => {
     ballSpeed,
     patient,
     startStopLoading,
-    startStopLoaded,
-    startStopError,
   } = useSelector((state) => ({
     patient: state.currentSession.patient,
     ballShape: state.currentSession.ballShape,
@@ -59,7 +56,7 @@ export const SessionAdmin = () => {
     startStopLoaded: state.currentSession.startStopLoaded,
     startStopError: state.currentSession.startStopError,
   }));
-  
+
   /**
    * Burada saçma işler döndü ben de tam anlamadım özetle
    * storedaki data ile state i güncelleme yapıldı
@@ -80,26 +77,38 @@ export const SessionAdmin = () => {
   };
 
   const startStopToggle = () => {
+    if (isActive) {
+      setIsPauseClicked(true);
+    } else {
+      setIsPauseClicked(false);
+    }
+
     dispatch(startStopAction({ isActive: !isActive, _id: id }, sessionId));
   };
 
-  /**
-   * Slider ın değerine göre otomatik hızı uyguluyor ama şu an çok fazla request atıyor ve sayfa
-   * yenilenince animasyonu başlatıyor.
-   */
   useEffect(() => {
     if (id) {
       dispatch(
         updateBallSpeed(
-          { ballSpeed: speedOfBallRef.current, isActive: isActive ? true : false, _id: id },
+          {
+            ballSpeed: speedOfBallRef.current,
+            isActive: isActive ? true : false,
+            _id: id,
+          },
           sessionId
         )
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speedOfBall]);
 
   const handleSound = (e) => {
-    dispatch(setSoundAction({ sound: e.target.value, isActive: isActive ? true : false, _id: id }, sessionId));
+    dispatch(
+      setSoundAction(
+        { sound: e.target.value, isActive: isActive ? true : false, _id: id },
+        sessionId
+      )
+    );
   };
 
   const [sessionLinkCopyBtnText, setSessionLinkCopyBtnText] = useState(
@@ -113,6 +122,8 @@ export const SessionAdmin = () => {
 
   // paylaşım için full url path
   const shareUrlString = `${window.location.origin}/${sessionId}`;
+
+  const [isPauseClicked, setIsPauseClicked] = useState(false);
 
   return (
     <div>
@@ -359,6 +370,7 @@ export const SessionAdmin = () => {
           style={{ maxHeight: "100vh", overflowY: "unset" }}
         >
           <AdminBall
+            isPauseClicked={isPauseClicked}
             patient={patient}
             ballShape={ballShape}
             ballSpeed={ballSpeed}

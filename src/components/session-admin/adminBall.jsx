@@ -33,8 +33,7 @@ export const AdminBall = (props) => {
 
   const dispatch = useDispatch();
 
-  // mapStateToProps alternatifi hook
-  const { patient, ballShape, ballSpeed, isActive, sound, _id } = props;
+  const { patient, ballShape, ballSpeed, isActive, sound, _id, isPauseClicked } = props;
 
   const keyframesStyle = `
     @keyframes mymoveSession {
@@ -45,8 +44,6 @@ export const AdminBall = (props) => {
 `;
   // Keyframes inject
   injectStyle(keyframesStyle);
-
-  console.log(socket);
 
   useEffect(() => {
     if (_id) {
@@ -82,6 +79,11 @@ export const AdminBall = (props) => {
   };
 
   const [play, setPlay] = useState(Cookies.get("allowSound") || false);
+  const [ count, setCount ] = useState(0);
+
+  const setCounter = () => {
+    setCount(count + 1)
+  }
 
   useEffect(() => {
     if (Cookies.get("allowSound") === true) {
@@ -100,6 +102,12 @@ export const AdminBall = (props) => {
     }
   }, [play, sound]);
 
+  useEffect(() => {
+    if (isPauseClicked === true) {
+      setCount(0);
+    }
+  }, [isPauseClicked])
+  
   const shape = new Map();
   const marginTopp = "";
 
@@ -181,6 +189,7 @@ export const AdminBall = (props) => {
           </div>
         )}
       </div>
+      <div className="mt-2 text-light bg-danger " >Hareket Sayacı: {count}</div>
       <div className="pt-4 pl-1 pr-4" style={style.container}>
         {patient ? null : (
           <div className="alert alert-danger" role="alert">
@@ -195,6 +204,11 @@ export const AdminBall = (props) => {
         callback={() => {
           playSound();
         }}
+      />
+      <ReactInterval
+        timeout={(speedArray[ballSpeed] * 1000) / 2}
+        enabled={isActive}
+        callback={() => setCounter()}
       />
     </div>
   );
