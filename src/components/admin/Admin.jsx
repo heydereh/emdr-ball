@@ -75,8 +75,8 @@ export const Admin = () => {
   return (
     <div /* style={{height: "100%"}} */>
       <Helmet>
-        <title>EMDRTR Göz Terapi Seans Oluştur</title>
-        <meta name="description" content="Emdr Göz Terapisi ücretsiz olarak uzaktan göz terapi seansları oluşturup danışanlarınızda seans yapabileceğiniz bir platform sunar." />
+        <title>EMDRTR Seans Oluştur</title>
+        <meta name="description" content="Emdr Terapisi | ücretsiz olarak uzaktan terapi seansları oluşturup danışanlarınızda seans yapabileceğiniz bir platform sunar." />
         <meta name="keywords" content="emdr,terapi,top,göz,seans" />
       </Helmet>
       <div className="container-lg container-md container-sm container-xl">

@@ -183,10 +183,10 @@ export const Session = (props) => {
     <div className="">
       <p className="border-bottom-dark ml-3">
         Sayın <strong className="text-capitalize">{patient}</strong>, seansınıza
-        hoşgeldiniz. Terapistiniz birazdan seansı başlatacaktır.
+        hoşgeldiniz. Danışmanınız birazdan seansı başlatacaktır.
       </p>
       <p className="ml-3 mt-0">
-        Terapist adı: <strong className="text-capitalize">{drName}.</strong>
+        Danışman adı: <strong className="text-capitalize">{drName}.</strong>
       </p>
     </div>
   );
@@ -223,10 +223,10 @@ export const Session = (props) => {
     >
       {!props.admin && (
         <Helmet>
-          <title>EMDRTR Göz Terapi Seansınıza hoş geldiniz</title>
+          <title>EMDRTR Terapi Seansınıza hoş geldiniz</title>
           <meta
             name="description"
-            content="Emdr Göz Terapisi terapistiniz ile online emdr seansı yapabilmenize olanak sağlar "
+            content="Emdr Terapisi | Danışmanınız ile online emdr seansı yapabilmenize olanak sağlar "
           />
           <meta name="keywords" content="emdr,terapi,top,göz,seans" />
         </Helmet>

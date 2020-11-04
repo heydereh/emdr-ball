@@ -128,10 +128,10 @@ export const SessionAdmin = () => {
   return (
     <div>
       <Helmet>
-        <title>EMDRTR Göz Terapi Seans Konsolu</title>
+        <title>EMDRTR Terapi Seans Konsolu</title>
         <meta
           name="description"
-          content="Emdr Göz Terapisi seans konsolu ile kolayca seansınızı kontrol edebilirsiniz."
+          content="Emdr Terapisi | Seans konsolu ile kolayca seansınızı kontrol edebilirsiniz."
         />
         <meta name="keywords" content="emdr,terapi,top,göz,seans" />
       </Helmet>

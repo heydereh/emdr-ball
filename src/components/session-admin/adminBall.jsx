@@ -163,10 +163,10 @@ export const AdminBall = (props) => {
     >
       {!props.admin && (
         <Helmet>
-          <title>EMDRTR Göz Terapi Seansınıza hoş geldiniz</title>
+          <title>EMDRTR Terapi Seansınıza hoş geldiniz</title>
           <meta
             name="description"
-            content="Emdr Göz Terapisi terapistiniz ile online emdr seansı yapabilmenize olanak sağlar "
+            content="Emdr Terapisi | Danışmanınız ile online emdr seansı yapabilmenize olanak sağlar "
           />
           <meta name="keywords" content="emdr,terapi,top,göz,seans" />
         </Helmet>
